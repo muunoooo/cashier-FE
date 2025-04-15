@@ -3,7 +3,7 @@
 import { useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import ClientLayout from "@/components/ClientLayout";
-import Loading from "@/components/loading";
+import { PacmanLoader } from "react-spinners";
 import useSession from "@/hooks/useSession";
 import Image from "next/image";
 import { AdminDashboard } from "./_components/AdminDashboard";
@@ -39,7 +39,7 @@ export default function DashboardPage() {
       {isLoading ? (
         <div className="p-6 text-center">
           <h2 className="text-2xl font-bold text-primary">Dashboard</h2>
-          <Loading />
+          <PacmanLoader color="#36d7b7" size={25} />
         </div>
       ) : (
         <div className=" max-w-5xl mx-auto">

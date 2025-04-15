@@ -6,8 +6,13 @@ import { useRouter } from "next/navigation";
 export const AdminDashboard = () => {
   const features = [
     {
-      title: "Kelola Official",
-      link: "/dashboard/admin/official-list",
+      title: "Cashier List",
+      link: "/dashboard/admin/cashier-list",
+      description: "Atur peran official seperti pelatih dan wasit",
+    },
+    {
+      title: "Product List",
+      link: "/dashboard/admin/product-list",
       description: "Atur peran official seperti pelatih dan wasit",
     },
   ];
