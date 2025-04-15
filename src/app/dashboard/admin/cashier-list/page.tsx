@@ -10,72 +10,60 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { fetchUsers } from "@/app/api/user";
-import { useSession } from "next-auth/react";
-import { User } from "@/types/user";
-import DeleteDialog from "./_components/DeleteDialog";
-import UpdateUserDialog from "./_components/UpdateUserDialog";
-import { showToast } from "@/utils/toast-handler";
+import { IUserPagination } from "@/types/user";
 import Loading from "@/components/loading";
-import SearchBarDebounce from "@/components/ui/searchBarDebounce";
-import { formatDateToDate } from "@/utils/dateTime";
 import PaginationDashboard from "@/components/PaginationDashboard";
-import { toTitleCase } from "@/utils/toTitleCase";
+import { ToTitleCase } from "@/helpers/ToTitleCase";
+import useSession from "@/hooks/useSession";
+import { formatDateToDate } from "@/helpers/Date";
+// import CreateUserDialog from "./_components/CreateCashierDialog";
+import { getAllUsers } from "@/api/user";
+import { toast } from "react-toastify";
+import CreateUserDialog from "./_components/CreateCashierDialog";
+import UpdateUserDialog from "./_components/UpdateCashierDialog";
+import { PacmanLoader } from "react-spinners";
+import DeleteUserDialog from "./_components/DeleteCashierDialog";
 
 const UserPage = () => {
-  const { data: session } = useSession();
-  const [users, setUsers] = useState<User[]>([]);
-  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-
+  const { isLoading: sessionLoading } = useSession();
+  const [users, setUsers] = useState<IUserPagination | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const limit = 20;
 
   const fetchUserData = useCallback(
     (page = 1) => {
-      if (session?.user?.accessToken) {
+      const token = localStorage.getItem("token");
+      if (token) {
         setIsLoading(true);
-        fetchUsers(session.user.accessToken, page, limit)
+        getAllUsers(page, limit, token)
           .then((response) => {
-            setUsers(response.data);
-            setFilteredUsers(response.data);
-            setTotalPages(response.meta.total_pages);
+            setUsers({
+              data: response.data,
+              pagination: response.pagination,
+            });
+
+            setTotalPages(response.pagination.totalPages);
           })
           .catch(() => {
-            showToast("Gagal mengambil pengguna", "error");
+            toast.error("Error Fetching User");
           })
           .finally(() => {
             setIsLoading(false);
           });
       }
     },
-    [session?.user?.accessToken, limit]
+    [limit]
   );
 
   useEffect(() => {
-    fetchUserData(currentPage);
-  }, [fetchUserData, currentPage]);
+    if (!sessionLoading) {
+      fetchUserData(currentPage);
+    }
+  }, [fetchUserData, currentPage, sessionLoading]);
 
   const refreshUsers = () => fetchUserData(currentPage);
-
-  const handleSearch = (
-    query: string,
-    event?: React.KeyboardEvent<HTMLInputElement>
-  ) => {
-    if (event && event.key !== "Enter") return;
-
-    if (!query) {
-      setFilteredUsers(users);
-    } else {
-      const filtered = users.filter((user) =>
-        user.full_name.toLowerCase().includes(query.toLowerCase())
-      );
-      setFilteredUsers(filtered);
-    }
-  };
-
-  const userSuggestions = users.map((user) => user.full_name);
 
   return (
     <ClientLayout>
@@ -94,22 +82,13 @@ const UserPage = () => {
           </div>
 
           {isLoading ? (
-            <Loading />
+            <PacmanLoader />
           ) : (
             <>
-              {/* Filter, Pencarian, dan Tombol Buat Pengguna */}
               <div className="flex flex-col sm:flex-row justify-between items-center gap-4 w-full">
-                {/* <CreateUserDialog onUserCreated={refreshUsers} /> */}
-                <div className="max-w-xs w-full sm:w-auto">
-                  <SearchBarDebounce
-                    onSearch={handleSearch}
-                    suggestions={userSuggestions}
-                    placeholder="Cari Nama User"
-                  />
-                </div>
+                <CreateUserDialog onUserCreated={refreshUsers} />
               </div>
 
-              {/* Tabel Pengguna */}
               <div className="w-full shadow rounded-md border border-gray-200">
                 <Table className="w-full p-2">
                   <TableHeader>
@@ -121,12 +100,11 @@ const UserPage = () => {
                       <TableHead className="hidden sm:table-cell">
                         Tanggal Terdaftar
                       </TableHead>
-                      {/* Sembunyikan di Mobile */}
                       <TableHead>Aksi</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {filteredUsers.map((user, index) => (
+                    {users?.data?.map((user, index) => (
                       <TableRow
                         key={user.id}
                         className="hover:bg-gray-50 text-sm"
@@ -134,11 +112,11 @@ const UserPage = () => {
                         <TableCell className="text-center">
                           {(currentPage - 1) * limit + index + 1}
                         </TableCell>
-                        <TableCell>{toTitleCase(user.full_name)}</TableCell>
+                        <TableCell>{ToTitleCase(user.name)}</TableCell>
                         <TableCell>{user.email}</TableCell>
-                        <TableCell>{user.roles.join(", ")}</TableCell>
+                        <TableCell>{user.role}</TableCell>
                         <TableCell className="hidden sm:table-cell">
-                          {formatDateToDate(user.created_at)}
+                          {formatDateToDate(user.createdAt)}
                         </TableCell>
                         <TableCell>
                           <div className="flex flex-wrap gap-2">
@@ -146,9 +124,9 @@ const UserPage = () => {
                               user={user}
                               onUserUpdated={refreshUsers}
                             />
-                            <DeleteDialog
+                            <DeleteUserDialog
                               userId={user.id}
-                              userName={user.full_name}
+                              name={user.name}
                               onUserDeleted={refreshUsers}
                             />
                           </div>

@@ -21,7 +21,8 @@ import {
 
 import Link from "next/link";
 import { deleteCookie } from "@/lib/action";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
+
 
 export function NavUser({
   user,

@@ -16,13 +16,16 @@ export default function DashboardPage() {
   const userRole = user?.role;
 
   useEffect(() => {
-    if (!isLoading && !isAuth) {
-      router.push("/auth/sign-in");
+    if (!isLoading) {
+      if (!isAuth) {
+        // Jika session belum valid, arahkan ke /sign-in
+        router.push("/sign-in");
+      }
     }
   }, [isLoading, isAuth, router]);
 
   const dashboardContent = useMemo(() => {
-    if (!userRole) {
+    if (!user || !userRole) {
       return (
         <p className="text-center text-gray-500">No valid role assigned.</p>
       );
@@ -32,7 +35,7 @@ export default function DashboardPage() {
     if (userRole === "CASHIER") return <CashierDashboard />;
 
     return <p className="text-center text-gray-500">No valid role assigned.</p>;
-  }, [userRole]);
+  }, [user, userRole]);
 
   return (
     <ClientLayout>

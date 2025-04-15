@@ -1,8 +1,8 @@
 "use client";
 
 import { IUser } from "@/types/user";
-import axios from "axios";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 const base_url = process.env.NEXT_PUBLIC_BASE_URL_BE;
 
@@ -11,30 +11,48 @@ const useSession = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [user, setUser] = useState<IUser | null>(null);
 
-  const checkSession = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) throw new Error("No token found");
-
-      const { data } = await axios.get(`${base_url}/user/profile`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      if (data) {
-        setUser(data.user);
-        setIsAuth(true);
-      }
-    } catch (err) {
-      console.error("Session check failed:", err);
-      setIsAuth(false);
-      setUser(null);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const checkSession = async () => {
+      const token = localStorage.getItem("token");
+      console.log("Token from localStorage:", token); // Debugging token
+
+      if (!token) {
+        setIsAuth(false);
+        setUser(null);
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        const { data } = await axios.get(`${base_url}/user/profile`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        console.log("Backend response:", data); // Debugging backend response
+
+        if (data?.user) {
+          setUser(data.user);
+          setIsAuth(true);
+        } else {
+          setIsAuth(false);
+          setUser(null);
+        }
+      } catch (err) {
+        console.error("❌ Session check failed:", err);
+        setIsAuth(false);
+        setUser(null);
+        localStorage.removeItem("token"); // Hapus token jika terjadi error
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
     checkSession();
+
+    return () => {
+      setIsAuth(false);
+      setIsLoading(false);
+      setUser(null);
+    };
   }, []);
 
   return { user, isAuth, isLoading, setIsAuth, setUser, setIsLoading };

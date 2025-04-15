@@ -1,13 +1,25 @@
 import { RegisterValues } from "@/types/auth";
+import { RegisterResponse } from "@/types/register";
 import axios from "axios";
 import { toast } from "react-toastify";
 
 const base_url = process.env.NEXT_PUBLIC_BASE_URL_BE;
 
-export async function registerUser(values: RegisterValues): Promise<any> {
+export async function registerUser(
+  values: RegisterValues,
+  token: string
+): Promise<RegisterResponse> {
   try {
-    const res = await axios.post(`${base_url}/auth/register`, values);
-    toast.success("Registration successful!");
+    const res = await axios.post<RegisterResponse>(
+      `${base_url}/auth/register`,
+      values,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
     return res.data;
   } catch (err: unknown) {
     if (axios.isAxiosError(err)) {
@@ -16,15 +28,17 @@ export async function registerUser(values: RegisterValues): Promise<any> {
 
       if (err.response?.status === 400) {
         if (errorMessage.toLowerCase().includes("email")) {
-          toast.error("Email is already in use. Please use another email.");
+          toast.error("Email sudah terpakai. Silakan gunakan email lain.");
         } else {
           toast.error(errorMessage);
         }
+      } else if (err.response?.status === 500) {
+        toast.error("Terjadi kesalahan server. Silakan coba lagi nanti.");
       } else {
-        toast.error(errorMessage);
+        toast.error("Terjadi kesalahan saat pendaftaran.");
       }
     } else {
-      toast.error("An unexpected error occurred.");
+      toast.error("Terjadi kesalahan tak terduga.");
     }
 
     console.error("Registration failed:", err);

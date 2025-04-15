@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
 import {
@@ -12,11 +10,11 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { createUser } from "@/app/api/user";
-import { useSession } from "next-auth/react";
-import { showToast } from "@/utils/toast-handler";
-import { AddUserSchema } from "@/schema/user";
 import { Plus } from "lucide-react";
+import { toast } from "react-toastify";
+import { registerUser } from "@/api/auth";
+import useSession from "@/hooks/useSession";
+import { RegisterSchema } from "@/lib/schema";
 
 interface CreateUserDialogProps {
   onUserCreated: () => void;
@@ -25,7 +23,7 @@ interface CreateUserDialogProps {
 const CreateUserDialog: React.FC<CreateUserDialogProps> = ({
   onUserCreated,
 }) => {
-  const { data: session } = useSession();
+  const { user } = useSession();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleSubmit = async (
@@ -35,27 +33,30 @@ const CreateUserDialog: React.FC<CreateUserDialogProps> = ({
       resetForm,
     }: FormikHelpers<{ name: string; email: string; password: string }>
   ) => {
-    if (!session?.user?.accessToken) {
-      showToast("Anda tidak memiliki akses", "error");
+    if (!user) {
+      toast("No user session found. Please log in first.");
+      return;
+    }
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      toast("No token found. Please log in again.");
       return;
     }
 
     try {
-      const result = await createUser(session.user.accessToken, {
-        ...values,
-        role: "ADMIN",
-      });
+      const result = await registerUser(values, token);
 
       if (result) {
-        showToast(`Admin "${values.name}" berhasil dibuat`, "success");
+        toast(`Cashier "${values.name}" was successfully created`);
         onUserCreated();
         resetForm();
         setIsDialogOpen(false);
       } else {
-        showToast("Gagal membuat pengguna", "error");
+        toast("Failed to create user");
       }
     } catch (error) {
-      showToast(`Terjadi kesalahan: ${error}`, "error");
     } finally {
       setSubmitting(false);
     }
@@ -71,11 +72,11 @@ const CreateUserDialog: React.FC<CreateUserDialogProps> = ({
       <DialogContent className="w-[380px] md:w-max">
         <DialogHeader>
           <DialogTitle className="text-2xl font-semibold">
-            Daftar Admin Baru
+            Add New Cashier
           </DialogTitle>
           <DialogDescription className="text-sm">
-            Isi bidang yang diperlukan untuk membuat admin baru.
-            <span className="text-red-500 font-bold"> *</span> wajib diisi.
+            Fill in the required fields to create a new admin.
+            <span className="text-red-500 font-bold"> *</span> is required.
           </DialogDescription>
         </DialogHeader>
 
@@ -85,22 +86,21 @@ const CreateUserDialog: React.FC<CreateUserDialogProps> = ({
             email: "",
             password: "",
           }}
-          validationSchema={AddUserSchema}
+          validationSchema={RegisterSchema}
           onSubmit={handleSubmit}
           validateOnChange={false}
           validateOnBlur={true}
         >
           {({ isSubmitting }) => (
             <Form className="space-y-4 mt-4">
-              
               <div>
                 <label className="block text-sm font-medium">
-                  Nama Lengkap <span className="text-red-500">*</span>
+                  Name <span className="text-red-500">*</span>
                 </label>
                 <Field
                   as={Input}
                   name="name"
-                  placeholder="Masukkan nama lengkap"
+                  placeholder="Input name..."
                   className="w-full"
                 />
                 <ErrorMessage
@@ -119,7 +119,7 @@ const CreateUserDialog: React.FC<CreateUserDialogProps> = ({
                   as={Input}
                   name="email"
                   type="email"
-                  placeholder="Masukkan email"
+                  placeholder="Input email..."
                   className="w-full"
                 />
                 <ErrorMessage
@@ -132,13 +132,13 @@ const CreateUserDialog: React.FC<CreateUserDialogProps> = ({
               {/* Kata Sandi */}
               <div>
                 <label className="block text-sm font-medium">
-                  Kata Sandi <span className="text-red-500">*</span>
+                  Password <span className="text-red-500">*</span>
                 </label>
                 <Field
                   as={Input}
                   name="password"
                   type="password"
-                  placeholder="Masukkan kata sandi"
+                  placeholder="Input password"
                   className="w-full"
                 />
                 <ErrorMessage
