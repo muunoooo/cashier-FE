@@ -6,11 +6,11 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 import { loginUser } from "@/api/auth";
-import useSession from "@/hooks/useSession";
 import { LoginSchema } from "@/lib/schema";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import { AxiosError } from "axios";
+import { useSession } from "@/contexts/SessionContext";
 
 export default function LoginPage() {
   const router = useRouter();

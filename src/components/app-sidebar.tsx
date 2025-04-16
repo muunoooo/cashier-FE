@@ -5,10 +5,10 @@ import {
   Users,
   PersonStanding,
   Briefcase,
-  SquareUser,
-  MountainSnow,
+  Home,
   Shield,
   UserPen,
+  Apple,
 } from "lucide-react";
 import { NavUser } from "@/components/nav-user";
 import {
@@ -26,8 +26,7 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import useSession from "@/hooks/useSession";
-import Home from "@/app/page";
+import { useSession } from "@/contexts/SessionContext";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user } = useSession();
@@ -44,9 +43,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     {
       title: "Cashier List",
       url: "/dashboard/admin/cashier-list",
-      icon: Shield,
+      icon: Users,
     },
-    { title: "Product", url: "/dashboard/admin/product", icon: Users },
+    {
+      title: "Product List",
+      url: "/dashboard/admin/product-list",
+      icon: Apple,
+    },
   ];
   const CashierMenu = [
     {
@@ -64,7 +67,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     >
       <SidebarHeader className="border-b">
         <div className="flex items-center gap-2 p-2 overflow-hidden transition-all duration-300">
-          <Image src="/Logo-SMS.png" alt="Logo" width={40} height={40} />
+          <Image src="/logo.jpeg" alt="Logo" width={40} height={40} />
 
           <span className="text-base text-red-600 whitespace-nowrap sidebar-expanded:block sidebar-collapsed:hidden">
             Liga Anak Indonesia
@@ -103,7 +106,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
         {userRole === "CASHIER" && (
           <SidebarGroup>
-            <SidebarGroupLabel>AKUN</SidebarGroupLabel>
+            <SidebarGroupLabel>CONTENT</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {CashierMenu.map((item) => {
@@ -139,7 +142,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         )}
         {userRole === "ADMIN" && (
           <SidebarGroup>
-            <SidebarGroupLabel>AKUN</SidebarGroupLabel>
+            <SidebarGroupLabel>CONTENT</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {AdminMenu.map((item) => {
@@ -176,17 +179,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
 
       <SidebarFooter className="border-t">
-        <div className="flex items-center gap-2 p-2 overflow-hidden transition-all duration-300">
-          <Link
-            href="/"
-            className="text-blue-600 text-sm flex items-center gap-2 hover:underline"
-          >
-            ⬅
-            <span className="text-base whitespace-nowrap sidebar-expanded:block sidebar-collapsed:hidden">
-              Kembali ke Beranda
-            </span>
-          </Link>
-        </div>
         <NavUser
           user={{
             name: user?.name || "User",

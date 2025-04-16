@@ -94,7 +94,7 @@ export function NavUser({
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={onLogout}>
               <LogOut />
-              <span className="text-red-800">Keluar Akun</span>
+              <span className="text-red-800">Log Out</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

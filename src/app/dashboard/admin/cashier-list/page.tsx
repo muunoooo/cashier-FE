@@ -11,18 +11,16 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { IUserPagination } from "@/types/user";
-import Loading from "@/components/loading";
 import PaginationDashboard from "@/components/PaginationDashboard";
 import { ToTitleCase } from "@/helpers/ToTitleCase";
-import useSession from "@/hooks/useSession";
 import { formatDateToDate } from "@/helpers/Date";
-// import CreateUserDialog from "./_components/CreateCashierDialog";
 import { getAllUsers } from "@/api/user";
 import { toast } from "react-toastify";
 import CreateUserDialog from "./_components/CreateCashierDialog";
 import UpdateUserDialog from "./_components/UpdateCashierDialog";
 import { PacmanLoader } from "react-spinners";
 import DeleteUserDialog from "./_components/DeleteCashierDialog";
+import { useSession } from "@/contexts/SessionContext";
 
 const UserPage = () => {
   const { isLoading: sessionLoading } = useSession();
@@ -69,14 +67,13 @@ const UserPage = () => {
     <ClientLayout>
       <div className="max-w-5xl mx-auto">
         <div className="flex flex-col gap-2 text-start justify-between items-center p-4 border rounded-lg shadow-sm bg-white">
-          {/* Header */}
           <div className="w-full text-start">
             <section className="border-b">
               <h1 className="text-xl font-bold text-gray-800">
-                Daftar Pengguna
+                Cashier List
               </h1>
               <h2 className="text-base text-gray-600">
-                Akun - Daftar Pengguna
+                Content - Cashier List
               </h2>
             </section>
           </div>
@@ -85,7 +82,7 @@ const UserPage = () => {
             <PacmanLoader />
           ) : (
             <>
-              <div className="flex flex-col sm:flex-row justify-between items-center gap-4 w-full">
+              <div className="flex flex-col sm:flex-row justify-end w-full">
                 <CreateUserDialog onUserCreated={refreshUsers} />
               </div>
 
@@ -93,14 +90,14 @@ const UserPage = () => {
                 <Table className="w-full p-2">
                   <TableHeader>
                     <TableRow className="text-sm">
-                      <TableHead className="text-center">No.</TableHead>
-                      <TableHead>Nama Lengkap</TableHead>
-                      <TableHead>Email</TableHead>
-                      <TableHead>Peran</TableHead>
+                      <TableHead className="text-center">#</TableHead>
+                      <TableHead>NAME</TableHead>
+                      <TableHead>EMAIL</TableHead>
+                      <TableHead>ROLE</TableHead>
                       <TableHead className="hidden sm:table-cell">
-                        Tanggal Terdaftar
+                      REGISTERED DATE
                       </TableHead>
-                      <TableHead>Aksi</TableHead>
+                      <TableHead>ACTION</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>

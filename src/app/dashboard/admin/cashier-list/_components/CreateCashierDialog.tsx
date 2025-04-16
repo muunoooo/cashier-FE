@@ -13,8 +13,9 @@ import { Input } from "@/components/ui/input";
 import { Plus } from "lucide-react";
 import { toast } from "react-toastify";
 import { registerUser } from "@/api/auth";
-import useSession from "@/hooks/useSession";
+
 import { RegisterSchema } from "@/lib/schema";
+import { useSession } from "@/contexts/SessionContext";
 
 interface CreateUserDialogProps {
   onUserCreated: () => void;

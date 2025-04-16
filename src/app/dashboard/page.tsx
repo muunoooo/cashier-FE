@@ -4,10 +4,10 @@ import { useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import ClientLayout from "@/components/ClientLayout";
 import { PacmanLoader } from "react-spinners";
-import useSession from "@/hooks/useSession";
 import Image from "next/image";
 import { AdminDashboard } from "./_components/AdminDashboard";
 import { CashierDashboard } from "./_components/CashierDashboard";
+import { useSession } from "@/contexts/SessionContext";
 
 export default function DashboardPage() {
   const { user, isAuth, isLoading } = useSession();
@@ -18,7 +18,7 @@ export default function DashboardPage() {
   useEffect(() => {
     if (!isLoading) {
       if (!isAuth) {
-        // Jika session belum valid, arahkan ke /sign-in
+
         router.push("/sign-in");
       }
     }

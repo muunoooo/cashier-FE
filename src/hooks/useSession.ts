@@ -14,7 +14,7 @@ const useSession = () => {
   useEffect(() => {
     const checkSession = async () => {
       const token = localStorage.getItem("token");
-      console.log("Token from localStorage:", token); // Debugging token
+      console.log("Token from localStorage:", token); 
 
       if (!token) {
         setIsAuth(false);
