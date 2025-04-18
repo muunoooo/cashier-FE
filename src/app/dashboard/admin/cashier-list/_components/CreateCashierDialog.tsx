@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Plus } from "lucide-react";
+import { Eye, EyeOff, Plus } from "lucide-react";
 import { toast } from "react-toastify";
 import { registerUser } from "@/api/auth";
 
@@ -26,6 +26,7 @@ const CreateUserDialog: React.FC<CreateUserDialogProps> = ({
 }) => {
   const { user } = useSession();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (
     values: { name: string; email: string; password: string },
@@ -66,7 +67,7 @@ const CreateUserDialog: React.FC<CreateUserDialogProps> = ({
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button className="rounded-lg bg-[#F00001]">
+        <Button className="rounded-lg bg-[#A76545]">
           <Plus /> Add New Cashier
         </Button>
       </DialogTrigger>
@@ -135,13 +136,24 @@ const CreateUserDialog: React.FC<CreateUserDialogProps> = ({
                 <label className="block text-sm font-medium">
                   Password <span className="text-red-500">*</span>
                 </label>
-                <Field
-                  as={Input}
-                  name="password"
-                  type="password"
-                  placeholder="Input password"
-                  className="w-full"
-                />
+
+                <div className="relative">
+                  <Field
+                    as={Input}
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Input password..."
+                    className="w-full pr-10"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-700"
+                  >
+                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  </button>
+                </div>
+
                 <ErrorMessage
                   name="password"
                   component="div"
@@ -154,17 +166,17 @@ const CreateUserDialog: React.FC<CreateUserDialogProps> = ({
                 <Button
                   type="button"
                   onClick={() => setIsDialogOpen(false)}
-                  variant="destructive"
                   className="px-6 py-2 rounded-lg"
+                  variant="secondary"
                 >
-                  Batal
+                  Cancel
                 </Button>
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="rounded-lg shadow"
+                  className="px-6 py-2 rounded-lg bg-[#A76545] hover:bg-red-700 text-white"
                 >
-                  {isSubmitting ? "Membuat..." : "Buat"}
+                  {isSubmitting ? "Adding..." : "Add"}
                 </Button>
               </div>
             </Form>

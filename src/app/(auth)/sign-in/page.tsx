@@ -45,19 +45,18 @@ export default function LoginPage() {
     }
   };
   return (
-    <div className="h-screen flex flex-col lg:flex-row bg-blue-300 text-white">
-      {/* Bagian Kiri - Background Gambar (Hidden di Mobile) */}
-      <div className="hidden lg:flex lg:w-1/2 relative bg-blue-400">
-        <Image
-          src="/homepage.jpeg"
-          alt="Login background"
-          layout="fill"
-          objectFit="cover"
-          className="rounded-lg"
-        />
+    <div className="h-screen flex flex-col lg:flex-row bg-gradient-to-r from-[#FFA55D] to-[#FFDF88] text-white">
+      <div className="hidden lg:flex lg:w-1/2 relative ">
+        <div className="relative h-full w-full flex items-center justify-center">
+          <div className="h-[400px] w-[90%] rounded-lg overflow-hidden">
+            <div
+              className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+              style={{ backgroundImage: "url('/homepage.jpeg')" }}
+            />
+          </div>
+        </div>
       </div>
 
-      {/* Bagian Kanan - Form Login (Full-Screen di Mobile) */}
       <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-6 md:p-12 shadow-lg rounded-lg h-screen">
         <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
           <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">
@@ -85,7 +84,7 @@ export default function LoginPage() {
                     name="email"
                     type="text"
                     placeholder="Enter your email"
-                    className="w-full px-4 py-2 border text-white bg-black border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    className="w-full px-4 py-2 border text-white bg-black border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:outline-none"
                   />
                   <ErrorMessage
                     name="email"
@@ -106,7 +105,7 @@ export default function LoginPage() {
                       name="password"
                       type={showPassword ? "text" : "password"}
                       placeholder="Enter your password"
-                      className="w-full px-4 py-2 border text-white bg-black border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none pr-10"
+                      className="w-full px-4 py-2 border text-white bg-black border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:outline-none pr-10"
                     />
                     <button
                       type="button"
@@ -125,7 +124,7 @@ export default function LoginPage() {
 
                 <button
                   type="submit"
-                  className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-200"
+                  className="w-full bg-[#A76545] text-white py-2 rounded-lg hover:bg-yellow-900 transition duration-200"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? "Signing In..." : "Sign In"}

@@ -48,10 +48,10 @@ export default function DashboardPage() {
         <div className=" max-w-5xl mx-auto">
           <div className="flex justify-between items-center p-4 border rounded-lg shadow-sm bg-white">
             <h1 className="text-lg font-bold text-gray-900">
-              Selamat Datang, {user?.name || "User"}!
+              Welcome, {user?.name || "User"}! 🐻
             </h1>
             <Image
-              src="/CMS/dashboard.png"
+              src="/dashboard.png"
               alt="Dashboard Illustration"
               width={100}
               height={100}

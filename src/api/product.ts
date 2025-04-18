@@ -1,4 +1,8 @@
-import { IProduct, IProductPagination } from "@/types/product";
+import {
+  IProduct,
+  IProductPagination,
+  IProductQueryParams,
+} from "@/types/product";
 import axios from "axios";
 import { toast } from "react-toastify";
 
@@ -14,12 +18,20 @@ const getAuthHeader = () => {
 };
 
 export async function getAllProducts(
-  page = 1,
-  limit = 10
+  params: IProductQueryParams = {}
 ): Promise<IProductPagination> {
   try {
+    const query = new URLSearchParams();
+
+    if (params.page) query.append("page", params.page.toString());
+    if (params.limit) query.append("limit", params.limit.toString());
+    if (params.search) query.append("search", params.search);
+    if (params.category) query.append("category", params.category);
+    if (params.sortBy) query.append("sortBy", params.sortBy);
+    if (params.order) query.append("order", params.order);
+
     const res = await axios.get(
-      `${base_url}/product?page=${page}&limit=${limit}`,
+      `${base_url}/product?${query.toString()}`,
       getAuthHeader()
     );
 
@@ -28,7 +40,7 @@ export async function getAllProducts(
       pagination: res.data.pagination,
     };
   } catch (err) {
-    console.error("Failed to fetch products:", err)
+    console.error("Failed to fetch products:", err);
     throw err;
   }
 }
@@ -47,7 +59,6 @@ export async function getProductById(id: string): Promise<IProduct> {
 export async function createProduct(data: FormData): Promise<IProduct> {
   try {
     const res = await axios.post(`${base_url}/product`, data, getAuthHeader());
-    toast.success("Produk berhasil ditambahkan!");
     return res.data.data;
   } catch (err) {
     console.error("Failed to create product:", err);
@@ -68,7 +79,6 @@ export async function updateProduct(
       },
     });
 
-    toast.success("Produk berhasil diperbarui!");
     return res.data.updatedProduct || res.data.data;
   } catch (err) {
     console.error("Failed to update product:", err);

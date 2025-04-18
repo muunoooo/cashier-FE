@@ -50,7 +50,7 @@ const DeleteUserDialog: React.FC<DeleteUserDialogProps> = ({
             Delete User
           </DialogTitle>
           <DialogDescription className="text-sm text-gray-600">
-            Are you sure you want to delete this <span className="text-orange-500">{name}</span>? This action cannot be
+            Are you sure you want to delete <span className="text-orange-500">{name}</span> account? This action cannot be
             undone.
           </DialogDescription>
         </DialogHeader>
@@ -75,7 +75,7 @@ const DeleteUserDialog: React.FC<DeleteUserDialogProps> = ({
               type="button"
               onClick={handleDelete}
               disabled={isSubmitting}
-              className="px-6 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white"
+              className="px-6 py-2 rounded-lg bg-[#A76545] hover:bg-red-700 text-white"
             >
               {isSubmitting ? "Deleting..." : "Delete"}
             </Button>

@@ -73,7 +73,7 @@ const PaginationDashboard: React.FC<PaginationProps> = ({
             onClick={() => onPageChange(Number(page))}
             className={`px-4 py-2 rounded-md font-medium ${
               currentPage === page
-                ? "bg-[#F00001] text-white"
+                ? "bg-[#A76545] text-white"
                 : "text-gray-600 hover:bg-gray-100"
             }`}
           >

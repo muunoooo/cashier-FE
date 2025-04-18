@@ -6,9 +6,9 @@ import { useRouter } from "next/navigation";
 export const CashierDashboard = () => {
   const features = [
     {
-      title: "Kelola Official",
-      link: "/dashboard/cashier/official-list",
-      description: "Atur peran official seperti pelatih dan wasit",
+      title: "Transaction",
+      link: "/dashboard/cashier/transaction",
+      description: "Start Transaction on Mister Bear",
     },
   ];
   return (

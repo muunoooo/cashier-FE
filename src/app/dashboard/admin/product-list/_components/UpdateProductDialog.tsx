@@ -52,11 +52,11 @@ const UpdateProductDialog: React.FC<UpdateProductDialogProps> = ({
       }
 
       await updateProduct(product.id, formData);
-      toast("Product updated successfully!");
+      toast.success("Product updated successfully!");
       onProductUpdated();
       setIsDialogOpen(false);
     } catch (error) {
-      toast("Failed to update product.");
+      toast.error("Failed to update product.");
     } finally {
       setIsSubmitting(false);
     }

@@ -53,8 +53,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   ];
   const CashierMenu = [
     {
-      title: "Daftar Official",
-      url: "/dashboard/admin/official-list",
+      title: "Transaction",
+      url: "/dashboard/cashier/transaction",
       icon: Briefcase,
     },
   ];
@@ -67,10 +67,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     >
       <SidebarHeader className="border-b">
         <div className="flex items-center gap-2 p-2 overflow-hidden transition-all duration-300">
-          <Image src="/logo.jpeg" alt="Logo" width={40} height={40} />
+          <Image src="/MisterBear.jpeg" alt="Logo" width={40} height={40} />
 
-          <span className="text-base text-red-600 whitespace-nowrap sidebar-expanded:block sidebar-collapsed:hidden">
-            Liga Anak Indonesia
+          <span className="text-base text-black whitespace-nowrap sidebar-expanded:block sidebar-collapsed:hidden">
+            Mister Bear
           </span>
         </div>
       </SidebarHeader>
@@ -85,14 +85,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     href={item.url}
                     className={`flex items-center gap-3 px-3 rounded-md ${
                       pathname === item.url
-                        ? "text-red-600 font-bold"
+                        ? "text-orange-900 font-bold"
                         : "text-gray-800"
                     }`}
                   >
                     <item.icon
                       className={`w-5 h-5 ${
                         pathname === item.url
-                          ? "text-[#F00001]"
+                          ? "text-orange-900"
                           : "text-gray-600"
                       }`}
                     />
@@ -119,13 +119,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                           href={item.url}
                           className={`flex items-center gap-3 p-3 rounded-md ${
                             isActive
-                              ? "text-red-600 font-bold"
+                              ? "text-orange-900 font-bold"
                               : "text-gray-800"
                           }`}
                         >
                           <item.icon
                             className={`w-5 h-5 ${
-                              isActive ? "text-red-600" : "text-gray-600"
+                              isActive ? "text-orange-900" : "text-gray-600"
                             }`}
                           />
                           <span className="text-sm font-medium">
@@ -155,13 +155,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                           href={item.url}
                           className={`flex items-center gap-3 p-3 rounded-md ${
                             isActive
-                              ? "text-red-600 font-bold"
+                              ? "text-orange-900 font-bold"
                               : "text-gray-800"
                           }`}
                         >
                           <item.icon
                             className={`w-5 h-5 ${
-                              isActive ? "text-red-600" : "text-gray-600"
+                              isActive ? "text-orange-900" : "text-gray-600"
                             }`}
                           />
                           <span className="text-sm font-medium">

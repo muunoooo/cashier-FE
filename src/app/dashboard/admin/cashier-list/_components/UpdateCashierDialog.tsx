@@ -98,15 +98,15 @@ const UpdateUserDialog: React.FC<UpdateUserDialogProps> = ({ user, onUserUpdated
               variant="secondary"
               className="px-6 py-2 rounded-lg"
             >
-              Batal
+              Cancel
             </Button>
             <Button
               type="button"
               onClick={handleSubmit}
               disabled={isSubmitting}
-              className="px-6 py-2 rounded-lg shadow"
+              className="px-6 py-2 rounded-lg bg-[#A76545] hover:bg-red-700 text-white"
             >
-              {isSubmitting ? "Memperbarui..." : "Perbarui"}
+              {isSubmitting ? "Updating..." : "Update"}
             </Button>
           </div>
         </div>

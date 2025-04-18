@@ -37,12 +37,21 @@ const UserPage = () => {
         setIsLoading(true);
         getAllUsers(page, limit, token)
           .then((response) => {
+            // 🔽 Filter out ADMINs di sini
+            const filteredUsers = response.data.filter(
+              (user) => user.role !== "ADMIN"
+            );
+
             setUsers({
-              data: response.data,
-              pagination: response.pagination,
+              data: filteredUsers,
+              pagination: {
+                ...response.pagination,
+                total: filteredUsers.length,
+                // NOTE: totalPages bisa kamu hitung ulang jika perlu
+              },
             });
 
-            setTotalPages(response.pagination.totalPages);
+            setTotalPages(response.pagination.totalPages); // or recalculate
           })
           .catch(() => {
             toast.error("Error Fetching User");
@@ -69,9 +78,7 @@ const UserPage = () => {
         <div className="flex flex-col gap-2 text-start justify-between items-center p-4 border rounded-lg shadow-sm bg-white">
           <div className="w-full text-start">
             <section className="border-b">
-              <h1 className="text-xl font-bold text-gray-800">
-                Cashier List
-              </h1>
+              <h1 className="text-xl font-bold text-gray-800">Cashier List</h1>
               <h2 className="text-base text-gray-600">
                 Content - Cashier List
               </h2>
@@ -95,7 +102,7 @@ const UserPage = () => {
                       <TableHead>EMAIL</TableHead>
                       <TableHead>ROLE</TableHead>
                       <TableHead className="hidden sm:table-cell">
-                      REGISTERED DATE
+                        REGISTERED DATE
                       </TableHead>
                       <TableHead>ACTION</TableHead>
                     </TableRow>

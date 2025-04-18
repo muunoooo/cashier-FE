@@ -56,7 +56,7 @@ const CreateProductDialog: React.FC<CreateProductDialogProps> = ({
 
       await createProduct(formData);
 
-      toast.success(`Product "${values.name}" berhasil dibuat`);
+      toast.success(`Product "${values.name}" created susccesfully`);
       onProductCreated();
       resetForm();
       setSelectedFile(null);
@@ -71,7 +71,7 @@ const CreateProductDialog: React.FC<CreateProductDialogProps> = ({
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button className="rounded-lg bg-[#F00001]">
+        <Button className="rounded-lg bg-[#A76545]">
           <Plus /> Add Product
         </Button>
       </DialogTrigger>
@@ -97,10 +97,12 @@ const CreateProductDialog: React.FC<CreateProductDialogProps> = ({
           onSubmit={handleSubmit}
           validateOnBlur={true}
         >
-          {({ isSubmitting, setFieldValue }) => (
+          {({ isSubmitting }) => (
             <Form className="space-y-4 mt-4">
               <div>
-                <label className="block text-sm font-medium">Nama Produk</label>
+                <label className="block text-sm font-medium">
+                  Product Name
+                </label>
                 <Field as={Input} name="name" placeholder="Nama Produk" />
                 <ErrorMessage
                   name="name"
@@ -110,7 +112,7 @@ const CreateProductDialog: React.FC<CreateProductDialogProps> = ({
               </div>
 
               <div>
-                <label className="block text-sm font-medium">Harga</label>
+                <label className="block text-sm font-medium">Price</label>
                 <Field name="price">
                   {({ field, form }: FieldProps<number>) => (
                     <Input
@@ -133,7 +135,7 @@ const CreateProductDialog: React.FC<CreateProductDialogProps> = ({
               </div>
 
               <div>
-                <label className="block text-sm font-medium">Stok</label>
+                <label className="block text-sm font-medium">Stock</label>
                 <Field
                   as={Input}
                   type="number"
@@ -148,15 +150,15 @@ const CreateProductDialog: React.FC<CreateProductDialogProps> = ({
               </div>
 
               <div>
-                <label className="block text-sm font-medium">Kategori</label>
+                <label className="block text-sm font-medium">Category</label>
                 <Field
                   as="select"
                   name="category"
                   className="w-full p-2 border rounded-md"
                 >
-                  <option value="">Pilih kategori</option>
-                  <option value="FOOD">FOOD</option>
-                  <option value="DRINK">DRINK</option>
+                  <option value="">Choose Category</option>
+                  <option value="FOOD">Food</option>
+                  <option value="DRINK">Drink</option>
                 </Field>
                 <ErrorMessage
                   name="category"
@@ -167,7 +169,7 @@ const CreateProductDialog: React.FC<CreateProductDialogProps> = ({
 
               <div>
                 <label className="block text-sm font-medium">
-                  Upload Gambar
+                  Product Photo
                 </label>
                 <Input
                   type="file"
@@ -184,12 +186,16 @@ const CreateProductDialog: React.FC<CreateProductDialogProps> = ({
                 <Button
                   type="button"
                   onClick={() => setIsDialogOpen(false)}
-                  variant="destructive"
+                  variant="secondary"
                 >
-                  Batal
+                  Cancel
                 </Button>
-                <Button type="submit" disabled={isSubmitting}>
-                  {isSubmitting ? "Membuat..." : "Buat"}
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="px-6 py-2 rounded-lg bg-[#A76545] hover:bg-red-700 text-white"
+                >
+                  {isSubmitting ? "Adding..." : "Add"}
                 </Button>
               </div>
             </Form>

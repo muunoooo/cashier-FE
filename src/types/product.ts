@@ -19,3 +19,12 @@ export interface IProductPagination {
     totalPages: number;
   };
 }
+
+export interface IProductQueryParams {
+  page?: number;
+  limit?: number;
+  search?: string;
+  category?: "FOOD" | "DRINK";
+  sortBy?: "name" | "price" | "stock" | "createdAt";
+  order?: "asc" | "desc";
+}

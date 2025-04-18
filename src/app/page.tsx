@@ -1,10 +1,13 @@
-import { Button } from "@/components/ui/button";
+"use client";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
-export default function Home() {
-  return (
-    <main className="flex min-h-screen items-center justify-center bg-emerald-100">
-      <h1 className="text-4xl font-bold text-emerald-800">Halo Cashier 🚀</h1>
-      <Button>Hello, Cashier!</Button>
-    </main>
-  );
+export default function HomePageRedirect() {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push("/sign-in");
+  }, [router]);
+
+  return null;
 }

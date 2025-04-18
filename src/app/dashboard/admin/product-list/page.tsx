@@ -16,41 +16,64 @@ import { getAllProducts } from "@/api/product";
 import { toast } from "react-toastify";
 import { PacmanLoader } from "react-spinners";
 import { useSession } from "@/contexts/SessionContext";
-import { IProductPagination, IProduct } from "@/types/product";
+import { IProductPagination } from "@/types/product";
 import CreateProductDialog from "./_components/CreateProductDialog";
 import { formatRupiah } from "@/helpers/Currency";
 import UpdateProductDialog from "./_components/UpdateProductDialog";
 import DeleteProductDialog from "./_components/DeleteProductDialog";
 import ProductDetailDialog from "./_components/ProductDetailDialog";
+import { categoryLabel } from "@/helpers/CategoryLabel";
+import { ToTitleCase } from "@/helpers/ToTitleCase";
 
 const ProductListPage = () => {
   const { isLoading: sessionLoading } = useSession();
   const [products, setProducts] = useState<IProductPagination | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<
+    "FOOD" | "DRINK" | "ALL"
+  >("ALL");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const limit = 20;
+  const limit = 10;
 
-  const fetchProductData = useCallback((page = 1) => {
-    setIsLoading(true);
-    getAllProducts(page, limit)
-      .then((response) => {
-        setProducts(response);
-        setTotalPages(response.pagination.totalPages);
+  const fetchProductData = useCallback(
+    (
+      page = 1,
+      options?: {
+        search?: string;
+        category?: "FOOD" | "DRINK";
+        sortBy?: "name" | "price" | "stock" | "createdAt";
+        order?: "asc" | "desc";
+      }
+    ) => {
+      setIsLoading(true);
+
+      getAllProducts({
+        page,
+        limit,
+        ...options,
       })
-      .catch(() => {
-        toast.error("Failed to fetch products:");
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, []);
+        .then((response) => {
+          setProducts(response);
+          setTotalPages(response.pagination.totalPages);
+        })
+        .catch(() => {
+          toast.error("Failed to fetch products");
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    },
+    [limit]
+  );
 
   useEffect(() => {
     if (!sessionLoading) {
-      fetchProductData(currentPage);
+      fetchProductData(currentPage, {
+        category: selectedCategory !== "ALL" ? selectedCategory : undefined,
+      });
     }
-  }, [fetchProductData, currentPage, sessionLoading]);
+  }, [fetchProductData, currentPage, selectedCategory, sessionLoading]);
 
   const refreshProducts = () => fetchProductData(currentPage);
 
@@ -72,6 +95,25 @@ const ProductListPage = () => {
           ) : (
             <>
               <div className="flex flex-col sm:flex-row justify-end w-full">
+                <div className="w-full mb-4 flex gap-3">
+                  {["ALL", "FOOD", "DRINK"].map((cat) => (
+                    <button
+                      key={cat}
+                      onClick={() =>
+                        setSelectedCategory(cat as typeof selectedCategory)
+                      }
+                      className={`px-4 py-2 rounded-md border text-sm font-medium ${
+                        selectedCategory === cat
+                          ? "bg-red-500 text-white border-red-500"
+                          : "bg-white text-gray-700 border-gray-300"
+                      }`}
+                    >
+                      {cat === "ALL"
+                        ? "All"
+                        : categoryLabel[cat as "FOOD" | "DRINK"]}
+                    </button>
+                  ))}
+                </div>
                 <CreateProductDialog onProductCreated={refreshProducts} />
               </div>
 
@@ -80,7 +122,7 @@ const ProductListPage = () => {
                   <TableHeader>
                     <TableRow className="text-sm">
                       <TableHead className="text-center">#</TableHead>
-                      <TableHead>NAME</TableHead>
+                      <TableHead>PRODUCT</TableHead>
                       <TableHead>PRICE</TableHead>
                       <TableHead>STOCK</TableHead>
                       <TableHead>CATEGORY</TableHead>
@@ -99,7 +141,7 @@ const ProductListPage = () => {
                         <TableCell className="text-center">
                           {(currentPage - 1) * limit + index + 1}
                         </TableCell>
-                        <TableCell>{product.name}</TableCell>
+                        <TableCell>{ToTitleCase(product.name)}</TableCell>
                         <TableCell>{formatRupiah(product.price)}</TableCell>
                         <TableCell>{product.stock}</TableCell>
                         <TableCell>{product.category}</TableCell>

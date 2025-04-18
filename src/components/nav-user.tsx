@@ -87,14 +87,14 @@ export function NavUser({
               <Link href={"/dashboard/profile"}>
                 <DropdownMenuItem>
                   <BadgeCheck />
-                  Akun
+                  Account
                 </DropdownMenuItem>
               </Link>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={onLogout}>
-              <LogOut />
-              <span className="text-red-800">Log Out</span>
+              <LogOut className="text-red-600"/>
+              <span className="text-red-600">Log Out</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
