@@ -46,25 +46,28 @@ export default function LoginPage() {
   };
   return (
     <div className="h-screen flex flex-col lg:flex-row bg-gradient-to-r from-[#FFA55D] to-[#FFDF88] text-white">
-      <div className="hidden lg:flex lg:w-1/2 relative ">
+      <div className="hidden lg:flex lg:w-1/2 relative">
         <div className="relative h-full w-full flex items-center justify-center">
-          <div className="h-[400px] w-[90%] rounded-lg overflow-hidden">
-            <div
-              className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-              style={{ backgroundImage: "url('/homepage.jpeg')" }}
+          <div className="h-[700px] w-[90%] rounded-lg overflow-hidden relative">
+            <Image
+              src="/homepage.jpeg"
+              alt="Homepage"
+              fill
+              className="object-cover object-center"
+              priority
             />
           </div>
         </div>
       </div>
 
-      <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-6 md:p-12 shadow-lg rounded-lg h-screen">
-        <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
+      <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-6 md:p-12 rounded-lg h-screen">
+        <div className="w-full max-w-md bg-white p-8 rounded-lg">
           <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">
-            Welcome Back!
+            Welcome Back Mister Cashier! 🐻
           </h2>
-          <p className="text-gray-600 mb-6 text-center">
-            Please enter your email and password to log in.
-          </p>
+          <h2 className="text-lg text-gray-600 mb-6 text-center">
+            Ready to provide excellent service to our customers?
+          </h2>
           <Formik
             initialValues={initialValues}
             validationSchema={LoginSchema}

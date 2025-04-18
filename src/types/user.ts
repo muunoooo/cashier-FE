@@ -17,7 +17,8 @@ export interface IUserPagination {
 }
 
 export interface IUserUpdate {
-  name: string;
-  email: string;
-  password?: string | null
+  name?: string;
+  email?: string;
+  password?: string | null;
+  avatar?: File | null;
 }

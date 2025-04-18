@@ -109,7 +109,7 @@ const SearchBarDebounce: React.FC<SearchBarProps> = ({
       {showSuggestions && filteredSuggestions.length > 0 && inputRect && (
         <Portal>
           <ul
-            className="bg-white border border-gray-200 rounded-lg shadow-md max-h-52 overflow-y-auto z-[9999]"
+            className="bg-slate-100 border border-gray-200 rounded-lg shadow-md max-h-52 overflow-y-auto z-[9999]"
             style={{
               top: inputRect.bottom + window.scrollY,
               left: inputRect.left + window.scrollX,

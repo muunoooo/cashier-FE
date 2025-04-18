@@ -8,3 +8,7 @@ export function formatDateToDate(dateString: string | undefined): string {
       day: "numeric",
     }).format(new Date(dateString));
   }
+
+export function formatDateToYYYYMMDD(date: Date): string {
+  return date.toISOString().split("T")[0]; // ambil format yyyy-mm-dd
+}

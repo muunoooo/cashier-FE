@@ -24,6 +24,7 @@ import DeleteProductDialog from "./_components/DeleteProductDialog";
 import ProductDetailDialog from "./_components/ProductDetailDialog";
 import { categoryLabel } from "@/helpers/CategoryLabel";
 import { ToTitleCase } from "@/helpers/ToTitleCase";
+import SearchBarDebounce from "@/components/SearchDebounce";
 
 const ProductListPage = () => {
   const { isLoading: sessionLoading } = useSession();
@@ -34,6 +35,7 @@ const ProductListPage = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const limit = 10;
 
   const fetchProductData = useCallback(
@@ -47,12 +49,7 @@ const ProductListPage = () => {
       }
     ) => {
       setIsLoading(true);
-
-      getAllProducts({
-        page,
-        limit,
-        ...options,
-      })
+      getAllProducts({ page, limit, ...options })
         .then((response) => {
           setProducts(response);
           setTotalPages(response.pagination.totalPages);
@@ -71,9 +68,20 @@ const ProductListPage = () => {
     if (!sessionLoading) {
       fetchProductData(currentPage, {
         category: selectedCategory !== "ALL" ? selectedCategory : undefined,
+        search: searchQuery,
       });
     }
-  }, [fetchProductData, currentPage, selectedCategory, sessionLoading]);
+  }, [
+    fetchProductData,
+    currentPage,
+    selectedCategory,
+    sessionLoading,
+    searchQuery,
+  ]);
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+  };
 
   const refreshProducts = () => fetchProductData(currentPage);
 
@@ -94,6 +102,12 @@ const ProductListPage = () => {
             <PacmanLoader />
           ) : (
             <>
+              <SearchBarDebounce
+                onSearch={handleSearch}
+                suggestions={[]}
+                placeHolder="Search products..."
+              />
+
               <div className="flex flex-col sm:flex-row justify-end w-full">
                 <div className="w-full mb-4 flex gap-3">
                   {["ALL", "FOOD", "DRINK"].map((cat) => (

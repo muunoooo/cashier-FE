@@ -80,8 +80,12 @@ const UpdateUserDialog: React.FC<UpdateUserDialogProps> = ({
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <FiEdit className="cursor-pointer text-blue-500 hover:text-blue-700" />
+        <div className="flex items-center space-x-2 cursor-pointer text-blue-500 hover:text-blue-700">
+          <FiEdit className="text-lg" />
+          <span className="text-sm font-semibold">Edit Profile</span>
+        </div>
       </DialogTrigger>
+
       <DialogContent className="w-[380px] md:max-w-lg">
         <DialogHeader>
           <DialogTitle className="text-2xl font-semibold text-gray-800">

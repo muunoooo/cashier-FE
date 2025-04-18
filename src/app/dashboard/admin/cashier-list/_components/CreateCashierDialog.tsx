@@ -13,7 +13,6 @@ import { Input } from "@/components/ui/input";
 import { Eye, EyeOff, Plus } from "lucide-react";
 import { toast } from "react-toastify";
 import { registerUser } from "@/api/auth";
-
 import { RegisterSchema } from "@/lib/schema";
 import { useSession } from "@/contexts/SessionContext";
 
@@ -40,15 +39,8 @@ const CreateUserDialog: React.FC<CreateUserDialogProps> = ({
       return;
     }
 
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-      toast("No token found. Please log in again.");
-      return;
-    }
-
     try {
-      const result = await registerUser(values, token);
+      const result = await registerUser(values);
 
       if (result) {
         toast(`Cashier "${values.name}" was successfully created`);
@@ -68,7 +60,7 @@ const CreateUserDialog: React.FC<CreateUserDialogProps> = ({
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
         <Button className="rounded-lg bg-[#A76545]">
-          <Plus /> Add New Cashier
+          <Plus /> Add Cashier
         </Button>
       </DialogTrigger>
       <DialogContent className="w-[380px] md:w-max">

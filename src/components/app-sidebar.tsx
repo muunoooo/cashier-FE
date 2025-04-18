@@ -50,11 +50,21 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       url: "/dashboard/admin/product-list",
       icon: Apple,
     },
+    {
+      title: "Report",
+      url: "/dashboard/admin/report",
+      icon: Apple,
+    },
   ];
   const CashierMenu = [
     {
       title: "Transaction",
       url: "/dashboard/cashier/transaction",
+      icon: Briefcase,
+    },
+    {
+      title: "Transaction History",
+      url: "/dashboard/cashier/transaction-history",
       icon: Briefcase,
     },
   ];
@@ -183,7 +193,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           user={{
             name: user?.name || "User",
             email: user?.email || "user@example.com",
-            avatar: "/default_profile.png",
+            avatar: user?.avatar || "/default_profile.png",
           }}
         />
       </SidebarFooter>

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { toast } from "react-toastify";
-import { IUser, IUserPagination } from "@/types/user";
+import { IUser, IUserPagination, IUserUpdate } from "@/types/user";
 
 const base_url = process.env.NEXT_PUBLIC_BASE_URL_BE;
 
@@ -16,14 +16,12 @@ const getAuthHeader = () => {
 export async function getAllUsers(
   page = 1,
   limit = 10,
-  token: string
+  query: string = ""
 ): Promise<IUserPagination> {
   try {
     const res = await axios.get(
-      `${base_url}/user?page=${page}&limit=${limit}`,
-      {
-        headers: { Authorization: `Bearer ${token}` }, 
-      }
+      `${base_url}/user?page=${page}&limit=${limit}&query=${query}`,
+      getAuthHeader()
     );
     return {
       data: res.data.data,
@@ -49,14 +47,23 @@ export async function getUserById(id: string): Promise<IUser> {
 
 export async function updateUser(
   id: string,
-  values: Partial<IUser>
+  values: IUserUpdate,
+  token: string  // Terima token sebagai parameter
 ): Promise<IUser> {
   try {
-    const res = await axios.put(
-      `${base_url}/user/${id}`,
-      values,
-      getAuthHeader()
-    );
+    const formData = new FormData();
+    if (values.name) formData.append("name", values.name);
+    if (values.email) formData.append("email", values.email);
+    if (values.password) formData.append("password", values.password);
+    if (values.avatar) formData.append("avatar", values.avatar);
+
+    const res = await axios.put(`${base_url}/user/${id}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,  // Gunakan token yang diterima
+      },
+    });
+
     toast.success("User updated successfully!");
     return res.data.updatedUser;
   } catch (err) {
