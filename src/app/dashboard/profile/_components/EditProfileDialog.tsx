@@ -71,6 +71,7 @@ const UpdateUserDialog: React.FC<UpdateUserDialogProps> = ({
       onUserUpdated();
       setIsDialogOpen(false);
     } catch (error) {
+      console.error("UPDATE ERROR:", error);
       toast("Failed to update user.");
     } finally {
       setIsSubmitting(false);

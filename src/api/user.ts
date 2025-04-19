@@ -48,7 +48,7 @@ export async function getUserById(id: string): Promise<IUser> {
 export async function updateUser(
   id: string,
   values: IUserUpdate,
-  token: string  // Terima token sebagai parameter
+  token: string
 ): Promise<IUser> {
   try {
     const formData = new FormData();
@@ -60,7 +60,7 @@ export async function updateUser(
     const res = await axios.put(`${base_url}/user/${id}`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${token}`,  // Gunakan token yang diterima
+        Authorization: `Bearer ${token}`,
       },
     });
 
