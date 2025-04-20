@@ -1,59 +1,30 @@
-import React from "react";
+"use client";
 
-const Loading: React.FC = () => {
+import { motion } from "framer-motion";
+import { Coffee, Loader2 } from "lucide-react";
+
+export default function Loading() {
   return (
-    <svg className="pl" viewBox="0 0 56 56" width="56px" height="56px" role="img" aria-label="Soccer ball">
-      <clipPath id="ball-clip">
-        <circle r="8" />
-      </clipPath>
-      <defs>
-        <path id="hex" d="M 0 -9.196 L 8 -4.577 L 8 4.661 L 0 9.28 L -8 4.661 L -8 -4.577 Z" />
-        <g id="hex-chunk" fill="none" stroke="hsl(var(--hue),10%,10%)" strokeWidth="0.5">
-          <use href="#hex" fill="hsl(var(--hue),10%,10%)" />
-          <use href="#hex" transform="translate(16,0)" />
-          <use href="#hex" transform="rotate(60) translate(16,0)" />
-        </g>
-        <g id="hex-pattern" transform="scale(0.333)">
-          <use href="#hex-chunk" />
-          <use href="#hex-chunk" transform="rotate(30) translate(0,48) rotate(-30)" />
-          <use href="#hex-chunk" transform="rotate(-180) translate(0,27.7) rotate(180)" />
-          <use href="#hex-chunk" transform="rotate(-120) translate(0,27.7) rotate(120)" />
-          <use href="#hex-chunk" transform="rotate(-60) translate(0,27.7) rotate(60)" />
-          <use href="#hex-chunk" transform="translate(0,27.7)" />
-          <use href="#hex-chunk" transform="rotate(60) translate(0,27.7) rotate(-60)" />
-          <use href="#hex-chunk" transform="rotate(120) translate(0,27.7) rotate(-120)" />
-        </g>
-        <g id="ball-texture" transform="translate(0,-3.5)">
-          <use href="#hex-pattern" transform="translate(-48,0)" />
-          <use href="#hex-pattern" transform="translate(-32,0)" />
-          <use href="#hex-pattern" transform="translate(-16,0)" />
-          <use href="#hex-pattern" transform="translate(0,0)" />
-          <use href="#hex-pattern" transform="translate(16,0)" />
-        </g>
-      </defs>
-      <filter id="ball-shadow-outside">
-        <feGaussianBlur in="SourceGraphic" stdDeviation="1" />
-      </filter>
-      <g transform="translate(28,28)">
-        <g className="plStripeDotGroup" fill="var(--red)">
-          <circle className="plStripeDot" transform="rotate(32) translate(-18.25,0)" />
-          <circle className="plStripeDot" transform="rotate(87) translate(-18.25,0)" />
-          <circle className="plStripeDot" transform="rotate(103) translate(-18.25,0)" />
-          <circle className="plStripeDot" transform="rotate(138) translate(-18.25,0)" />
-          <circle className="plStripeDot" transform="rotate(228) translate(-18.25,0)" />
-          <circle className="plStripeDot" transform="rotate(243) translate(-18.25,0)" />
-          <circle className="plStripeDot" transform="rotate(328) translate(-18.25,0)" />
-        </g>
-        <g className="plBall" transform="translate(0,-15.75)">
-          <circle className="plBallShadow" filter="url(#ball-shadow-outside)" fill="hsla(var(--hue),10%,10%,0.5)" r="8" cx="1" cy="1" />
-          <circle fill="var(--white)" r="8" />
-          <g clipPath="url(#ball-clip)">
-            <use className="plBallTexture" href="#ball-texture" />
-          </g>
-        </g>
-      </g>
-    </svg>
+    <div className="fixed inset-0 z-50 bg-black bg-opacity-60 flex flex-col items-center justify-center text-white">
+      <motion.div
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.4, ease: "easeInOut" }}
+        className="flex flex-col items-center justify-center p-6 bg-white rounded-2xl shadow-lg"
+      >
+        <motion.div
+          animate={{ rotate: [0, 15, -15, 0] }}
+          transition={{ repeat: Infinity, duration: 1.8 }}
+          className="text-5xl"
+        >
+          🐻
+        </motion.div>
+        <p className="text-lg font-semibold text-gray-800 mt-4 mb-1">
+          Mister Cashier is brewing your coffee...
+        </p>
+        <Coffee className="w-6 h-6 text-[#A76545] animate-bounce mt-1" />
+        <Loader2 className="w-5 h-5 text-gray-500 mt-4 animate-spin" />
+      </motion.div>
+    </div>
   );
-};
-
-export default Loading;
+}

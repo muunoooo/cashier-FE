@@ -8,12 +8,17 @@ export const AdminDashboard = () => {
     {
       title: "Cashier List",
       link: "/dashboard/admin/cashier-list",
-      description: "Manage Cashier List",
+      description: "View and manage all registered cashiers on Mister Bear",
     },
     {
       title: "Product List",
       link: "/dashboard/admin/product-list",
-      description: "Manage Product List",
+      description: "Manage available products and keep inventory updated",
+    },
+    {
+      title: "Report",
+      link: "/dashboard/admin/report",
+      description: "Analyze sales and performance reports on Mister Bear",
     },
   ];
   return (

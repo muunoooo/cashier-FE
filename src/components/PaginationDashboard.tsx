@@ -42,14 +42,16 @@ const PaginationDashboard: React.FC<PaginationProps> = ({
   totalPages,
   onPageChange,
 }) => {
-  const pageNumbers = generatePageNumbers(currentPage, totalPages);
+  const validTotalPages = totalPages < 1 ? 1 : totalPages;
+
+  const pageNumbers = generatePageNumbers(currentPage, validTotalPages);
 
   const handlePrev = () => {
     if (currentPage > 1) onPageChange(currentPage - 1);
   };
 
   const handleNext = () => {
-    if (currentPage < totalPages) onPageChange(currentPage + 1);
+    if (currentPage < validTotalPages) onPageChange(currentPage + 1);
   };
 
   return (
@@ -84,7 +86,7 @@ const PaginationDashboard: React.FC<PaginationProps> = ({
 
       <button
         onClick={handleNext}
-        disabled={currentPage === totalPages}
+        disabled={currentPage === validTotalPages}
         className="px-3 py-2 rounded-md text-gray-500 hover:bg-gray-100 disabled:opacity-50"
       >
         &gt;

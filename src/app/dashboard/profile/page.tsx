@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import Loading from "@/components/loading";
-import ClientLayout from "@/components/ClientLayout";
 import { useSession } from "@/contexts/SessionContext";
 import { IUser } from "@/types/user";
 import { formatDateToDate } from "@/helpers/Date";
@@ -10,6 +9,7 @@ import Image from "next/image";
 import { getUserProfile } from "@/api/auth";
 import { toast } from "react-toastify";
 import UpdateUserDialog from "./_components/EditProfileDialog";
+import ClientLayout from "@/components/ClientLayout";
 
 const ProfilePage = () => {
   const { user, isAuth, isLoading: sessionLoading } = useSession();
@@ -22,7 +22,7 @@ const ProfilePage = () => {
     const fetchUserProfile = async () => {
       setIsLoading(true);
       try {
-        const userData = await getUserProfile(user.id);
+        const userData = await getUserProfile();
         setUserData(userData);
       } catch (error) {
         console.error("Error fetching profile", error);
@@ -38,10 +38,11 @@ const ProfilePage = () => {
   const refreshUsers = async () => {
     if (!user?.id) return;
     try {
-      const updatedUser = await getUserProfile(user.id);
+      const updatedUser = await getUserProfile();
       setUserData(updatedUser);
     } catch (error) {
       toast.error("Gagal memperbarui data profil");
+      console.error(error)
     }
   };
 

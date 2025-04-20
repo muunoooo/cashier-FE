@@ -14,11 +14,11 @@ import PaginationDashboard from "@/components/PaginationDashboard";
 import { formatDateToDate } from "@/helpers/Date";
 import { getAllTransactions } from "@/api/transaction";
 import { toast } from "react-toastify";
-import { PacmanLoader } from "react-spinners";
 import { useSession } from "@/contexts/SessionContext";
 import { ITransactionPagination } from "@/types/transcation";
 import TransactionDetailDialog from "./_components/TransactionDetailDialog";
 import { formatRupiah } from "@/helpers/Currency";
+import Loading from "@/components/loading";
 
 const TransactionPage = () => {
   const { isLoading: sessionLoading } = useSession();
@@ -27,102 +27,133 @@ const TransactionPage = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [searchQuery, setSearchQuery] = useState<string>("");
-  const limit = 5;
+  const limit = 10;
 
   const fetchTransactionData = useCallback(
-    (page = 1, query = "") => {
+    async (page = 1, query = "") => {
       const token = localStorage.getItem("token");
       if (!token) return;
 
       setIsLoading(true);
-      const isSearching = query.trim() !== "";
 
-      const effectiveLimit = isSearching ? 100 : limit;
-
-      getAllTransactions(page, effectiveLimit, query)
-        .then((response) => {
-          setTransactions({
-            data: response.data,
-            pagination: response.pagination,
-          });
-          setTotalPages(response.pagination.totalPages);
-        })
-        .catch(() => {
-          toast.error("Error Fetching Transactions");
-        })
-        .finally(() => {
-          setIsLoading(false);
+      try {
+        const response = await getAllTransactions(page, limit, query);
+        setTransactions({
+          data: response.data,
+          pagination: response.pagination,
         });
+        setTotalPages(response.pagination.totalPages);
+      } catch (err) {
+        console.error(err);
+        toast.error("Error Fetching Transactions");
+      } finally {
+        setIsLoading(false);
+      }
     },
     [limit]
   );
 
   useEffect(() => {
     if (!sessionLoading) {
-      fetchTransactionData(currentPage, searchQuery);
+      fetchTransactionData(currentPage);
     }
-  }, [sessionLoading, currentPage, searchQuery]);
+  }, [sessionLoading, currentPage, fetchTransactionData]);
 
   return (
     <ClientLayout>
-      <div className="max-w-5xl mx-auto">
-        <div className="flex flex-col gap-2 text-start justify-between items-center p-4 border rounded-lg shadow-sm bg-white">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="flex flex-col gap-4 text-start justify-between items-center p-4 border rounded-lg shadow-sm bg-white">
+          {/* Header */}
           <div className="w-full text-start">
-            <section className="border-b">
-              <h1 className="text-xl font-bold text-gray-800">
+            <section className="border-b pb-2">
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-800">
                 Transaction List
               </h1>
-              <h2 className="text-base text-gray-600">
+              <h2 className="text-sm sm:text-base text-gray-600">
                 Content - Transaction List
               </h2>
             </section>
           </div>
 
           {isLoading ? (
-            <PacmanLoader />
+            <Loading />
           ) : (
             <>
-              <div className="w-full shadow rounded-md border border-gray-200">
-                <Table className="w-full p-2">
-                  <TableHeader>
-                    <TableRow className="text-sm">
-                      <TableHead className="text-center">#</TableHead>
-                      <TableHead>DATE</TableHead>
-                      <TableHead>CASHIER</TableHead>
-                      <TableHead>TOTAL PRICE</TableHead>
-                      <TableHead>PAYMENT METHOD</TableHead>
-                      <TableHead>DATE</TableHead>
-                      <TableHead>ACTION</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {transactions?.data?.map((transaction, index) => (
-                      <TableRow
-                        key={transaction.id}
-                        className="hover:bg-gray-50 text-sm"
-                      >
-                        <TableCell className="text-center">
-                          {(currentPage - 1) * limit + index + 1}
-                        </TableCell>
-                        <TableCell>
-                          {formatDateToDate(transaction.createdAt)}
-                        </TableCell>
-                        <TableCell>{transaction.cashier.name}</TableCell>
-                        <TableCell>{formatRupiah(transaction.totalPrice)}</TableCell>
-                        <TableCell>{transaction.paymentMethod}</TableCell>
-                        <TableCell>
-                          {formatDateToDate(transaction.createdAt)}
-                        </TableCell>
-                        <TableCell>
-                          <TransactionDetailDialog
-                            transactionId={transaction.id}
-                          />
-                        </TableCell>
+              <div className="hidden md:block w-full overflow-x-auto">
+                <div className="min-w-[700px] shadow rounded-md border border-gray-200">
+                  <Table className="w-full">
+                    <TableHeader>
+                      <TableRow className="text-sm">
+                        <TableHead className="text-center">#</TableHead>
+                        <TableHead>DATE</TableHead>
+                        <TableHead>CASHIER</TableHead>
+                        <TableHead>TOTAL PRICE</TableHead>
+                        <TableHead>PAYMENT METHOD</TableHead>
+                        <TableHead>DATE</TableHead>
+                        <TableHead>ACTION</TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                    </TableHeader>
+                    <TableBody>
+                      {transactions?.data?.map((transaction, index) => (
+                        <TableRow
+                          key={transaction.id}
+                          className="hover:bg-gray-50 text-sm"
+                        >
+                          <TableCell className="text-center">
+                            {(currentPage - 1) * limit + index + 1}
+                          </TableCell>
+                          <TableCell>
+                            {formatDateToDate(transaction.createdAt)}
+                          </TableCell>
+                          <TableCell>{transaction.cashier.name}</TableCell>
+                          <TableCell>
+                            {formatRupiah(transaction.totalPrice)}
+                          </TableCell>
+                          <TableCell>{transaction.paymentMethod}</TableCell>
+                          <TableCell>
+                            {formatDateToDate(transaction.createdAt)}
+                          </TableCell>
+                          <TableCell>
+                            <TransactionDetailDialog
+                              transactionId={transaction.id}
+                            />
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </div>
+
+              <div className="md:hidden flex flex-col gap-4 w-full">
+                {transactions?.data?.map((transaction, index) => (
+                  <div
+                    key={transaction.id}
+                    className="border rounded-lg shadow p-4 bg-white text-sm"
+                  >
+                    <div className="flex justify-between mb-2 text-gray-500 font-medium">
+                      <span>#{(currentPage - 1) * limit + index + 1}</span>
+                      <span>{formatDateToDate(transaction.createdAt)}</span>
+                    </div>
+                    <div className="text-gray-700">
+                      <p>
+                        <span className="font-semibold">Cashier: </span>
+                        {transaction.cashier.name}
+                      </p>
+                      <p>
+                        <span className="font-semibold">Total: </span>
+                        {formatRupiah(transaction.totalPrice)}
+                      </p>
+                      <p>
+                        <span className="font-semibold">Payment: </span>
+                        {transaction.paymentMethod}
+                      </p>
+                    </div>
+                    <div className="mt-3 text-right">
+                      <TransactionDetailDialog transactionId={transaction.id} />
+                    </div>
+                  </div>
+                ))}
               </div>
 
               <PaginationDashboard

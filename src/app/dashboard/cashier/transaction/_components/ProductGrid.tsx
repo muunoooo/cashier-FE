@@ -7,7 +7,7 @@ import { ToTitleCase } from "@/helpers/ToTitleCase";
 import Image from "next/image";
 import PaginationDashboard from "@/components/PaginationDashboard";
 import { useCart } from "@/contexts/CartContext";
-import { PacmanLoader } from "react-spinners";
+import Loading from "@/components/loading";
 
 export default function ProductGrid() {
   const [products, setProducts] = useState<IProduct[]>([]);
@@ -74,7 +74,7 @@ export default function ProductGrid() {
 
       {/* Product Grid */}
       {isLoading ? (
-        <PacmanLoader/>
+        <Loading/>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           {products.map((product) => (

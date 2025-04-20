@@ -8,12 +8,17 @@ export const CashierDashboard = () => {
     {
       title: "Transaction",
       link: "/dashboard/cashier/transaction",
-      description: "Start Transaction on Mister Bear",
+      description: "Start a new transaction for your customer on Mister Bear",
+    },
+    {
+      title: "Transaction History",
+      link: "/dashboard/cashier/transaction-history",
+      description: "Review past transactions you've completed on Mister Bear",
     },
   ];
   return (
     <div className="mt-4 flex flex-col text-start justify-between items-start p-4 border rounded-lg shadow-sm bg-white">
-      <h2 className="text-lg font-bold text-gray-900">Akses Cepat</h2>
+      <h2 className="text-lg font-bold text-gray-900">Quick Access</h2>
       <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-4">
         {features.map((feature) => (
           <FeatureCard

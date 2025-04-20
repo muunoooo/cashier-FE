@@ -14,7 +14,6 @@ import PaginationDashboard from "@/components/PaginationDashboard";
 import { formatDateToDate } from "@/helpers/Date";
 import { getAllProducts } from "@/api/product";
 import { toast } from "react-toastify";
-import { PacmanLoader } from "react-spinners";
 import { useSession } from "@/contexts/SessionContext";
 import { IProductPagination } from "@/types/product";
 import CreateProductDialog from "./_components/CreateProductDialog";
@@ -25,6 +24,7 @@ import ProductDetailDialog from "./_components/ProductDetailDialog";
 import { categoryLabel } from "@/helpers/CategoryLabel";
 import { ToTitleCase } from "@/helpers/ToTitleCase";
 import SearchBarDebounce from "@/components/SearchDebounce";
+import Loading from "@/components/loading";
 
 const ProductListPage = () => {
   const { isLoading: sessionLoading } = useSession();
@@ -99,7 +99,7 @@ const ProductListPage = () => {
           </div>
 
           {isLoading ? (
-            <PacmanLoader />
+            <Loading />
           ) : (
             <>
               <SearchBarDebounce
@@ -118,7 +118,7 @@ const ProductListPage = () => {
                       }
                       className={`px-4 py-2 rounded-md border text-sm font-medium ${
                         selectedCategory === cat
-                          ? "bg-red-500 text-white border-red-500"
+                          ? "bg-[#ACC572] text-white border-[#ACC572]"
                           : "bg-white text-gray-700 border-gray-300"
                       }`}
                     >

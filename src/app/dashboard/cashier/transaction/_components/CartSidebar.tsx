@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
 import { getShift } from "@/api/shift";
 import { useSession } from "@/contexts/SessionContext";
-import { formatToRupiah, parseRupiahString } from "@/helpers/Currency";
+import { formatToRupiah } from "@/helpers/Currency";
 
 export default function CartSidebar() {
   const { user } = useSession();
@@ -33,14 +33,14 @@ export default function CartSidebar() {
           if (shiftData.message === "Active shift found" && activeShiftId) {
             setShiftId(activeShiftId);
           } else {
-            toast.error("Tidak ada shift aktif saat ini.");
+            toast.error("No active shift found.");
           }
         } else {
-          toast.error("Tidak ada data shift ditemukan.");
+          toast.error("No shift data found.");
         }
       } catch (error) {
         console.error("Error fetching active shift:", error);
-        toast.error("Gagal mengambil shift aktif.");
+        toast.error("Failed to fetch active shift.");
       } finally {
         setLoading(false);
       }
@@ -51,17 +51,17 @@ export default function CartSidebar() {
 
   const handlePayment = async () => {
     if (paymentMethod === "CASH" && cashPaid < total) {
-      toast.error("Uang yang dibayar tidak cukup!");
+      toast.error("Insufficient cash paid!");
       return;
     }
 
     if (paymentMethod === "DEBIT" && !debitCardNo.trim()) {
-      toast.error("Nomor kartu debit harus diisi!");
+      toast.error("Debit card number is required!");
       return;
     }
 
     if (!shiftId) {
-      toast.error("Shift tidak ditemukan!");
+      toast.error("Shift not found!");
       return;
     }
 
@@ -103,7 +103,8 @@ export default function CartSidebar() {
 
     try {
       await createTransaction(shiftId, transactionData);
-      toast.success("Transaksi berhasil dibuat!");
+
+      toast.success("Transaction created successfully!");
 
       setCashPaid(0);
       setDebitCardNo("");
@@ -111,19 +112,20 @@ export default function CartSidebar() {
       clearCart();
     } catch (err) {
       console.error("Error creating transaction:", err);
-      toast.error("Gagal membuat transaksi.");
+      toast.error("Failed to create transaction.");
     }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value;
-    setFormattedCashPaid(inputValue);
-    const numericValue = parseRupiahString(inputValue); // Mengonversi input ke angka
-    setCashPaid(numericValue);
-  };
+    const rawValue = e.target.value;
 
-  const handleBlur = () => {
-    setFormattedCashPaid(formatToRupiah(cashPaid)); 
+    const cleaned = rawValue.replace(/[^\d]/g, "");
+
+    const numericValue = parseInt(cleaned, 10) || 0;
+
+    setCashPaid(numericValue);
+
+    setFormattedCashPaid(formatToRupiah(numericValue));
   };
 
   return (
@@ -197,7 +199,7 @@ export default function CartSidebar() {
                 type="text"
                 value={formattedCashPaid}
                 onChange={handleChange}
-                onBlur={handleBlur}
+                // onBlur={handleBlur}
                 className="ml-2 p-2 border rounded w-full sm:w-auto"
                 placeholder="Enter amount"
               />

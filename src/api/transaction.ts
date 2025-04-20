@@ -37,7 +37,6 @@ export async function getTransactionById(id: string): Promise<ITransaction> {
       `${base_url}/transaction/${id}`,
       getAuthHeader()
     );
-    // Mengakses 'data' dalam respons
     return res.data.data as ITransaction;
   } catch (err) {
     console.error(`Failed to fetch transaction with ID ${id}:`, err);
@@ -56,11 +55,9 @@ export async function createTransaction(
       transactionData,
       getAuthHeader()
     );
-    toast.success("Transaksi berhasil dibuat!");
     return res.data.transaction as ITransaction;
   } catch (err) {
     console.error("Failed to create transaction:", err);
-    toast.error("Gagal membuat transaksi.");
     throw err;
   }
 }

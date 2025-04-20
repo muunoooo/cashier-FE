@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Dialog,
   DialogTrigger,
@@ -28,24 +28,24 @@ const TransactionDetailDialog: React.FC<TransactionDetailDialogProps> = ({
   const [transaction, setTransaction] = useState<ITransaction | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const fetchTransactionDetail = async () => {
+  const fetchTransactionDetail = useCallback(async () => {
     setIsLoading(true);
     try {
       const data = await getTransactionById(transactionId);
       setTransaction(data);
     } catch (err) {
+      console.error(err);
       setTransaction(null);
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [transactionId]);
 
   useEffect(() => {
     if (isDialogOpen) {
       fetchTransactionDetail();
     }
-  }, [isDialogOpen]);
-
+  }, [isDialogOpen, fetchTransactionDetail]);
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>

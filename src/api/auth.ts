@@ -66,9 +66,7 @@ export async function registerUser(
   }
 }
 
-
-
-export const getUserProfile = async (token: string) => {
+export const getUserProfile = async () => {
   try {
     const response = await axios.get(
       `${base_url}/user/profile`,

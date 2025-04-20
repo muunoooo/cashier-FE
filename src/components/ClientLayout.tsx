@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 
 import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { ToastContainer } from "react-toastify";
 
 export default function ClientLayout({
   children,
@@ -23,6 +24,13 @@ export default function ClientLayout({
           <SidebarTrigger />
           {children}
         </main>
+        <ToastContainer
+          draggable
+          closeOnClick
+          autoClose={5000}
+          theme="dark"
+          position="bottom-right"
+        />
       </div>
     </SidebarProvider>
   );

@@ -55,7 +55,8 @@ const UpdateProductDialog: React.FC<UpdateProductDialogProps> = ({
       toast.success("Product updated successfully!");
       onProductUpdated();
       setIsDialogOpen(false);
-    } catch (error) {
+    } catch (err) {
+      console.error(err);
       toast.error("Failed to update product.");
     } finally {
       setIsSubmitting(false);
@@ -149,6 +150,7 @@ const UpdateProductDialog: React.FC<UpdateProductDialogProps> = ({
               type="button"
               onClick={handleSubmit}
               disabled={isSubmitting}
+              className="px-6 py-2 rounded-lg bg-[#A76545] hover:bg-red-700 text-white"
             >
               {isSubmitting ? "Updating..." : "Update"}
             </Button>

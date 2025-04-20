@@ -50,7 +50,8 @@ const CreateUserDialog: React.FC<CreateUserDialogProps> = ({
       } else {
         toast("Failed to create user");
       }
-    } catch (error) {
+    } catch (err) {
+      console.error(err)
     } finally {
       setSubmitting(false);
     }

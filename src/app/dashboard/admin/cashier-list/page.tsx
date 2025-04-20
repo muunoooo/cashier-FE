@@ -18,10 +18,10 @@ import { getAllUsers } from "@/api/user";
 import { toast } from "react-toastify";
 import CreateUserDialog from "./_components/CreateCashierDialog";
 import UpdateUserDialog from "./_components/UpdateCashierDialog";
-import { PacmanLoader } from "react-spinners";
 import DeleteUserDialog from "./_components/DeleteCashierDialog";
 import { useSession } from "@/contexts/SessionContext";
 import SearchBarDebounce from "@/components/SearchDebounce";
+import Loading from "@/components/loading";
 
 const UserPage = () => {
   const { isLoading: sessionLoading } = useSession();
@@ -65,7 +65,7 @@ const UserPage = () => {
     if (!sessionLoading) {
       fetchUserData(currentPage, searchQuery);
     }
-  }, [sessionLoading, currentPage, searchQuery]);
+  }, [sessionLoading, currentPage, searchQuery, fetchUserData]);
 
   const refreshUsers = () => fetchUserData(currentPage, searchQuery);
 
@@ -86,7 +86,7 @@ const UserPage = () => {
       const names = res.data.map((user) => user.name);
       setAllNames(names);
     } catch (err) {
-      console.error("Failed to fetch suggestions");
+      console.error(err);
     }
   };
 
@@ -104,7 +104,7 @@ const UserPage = () => {
           </div>
 
           {isLoading ? (
-            <PacmanLoader />
+            <Loading />
           ) : (
             <>
               <SearchBarDebounce

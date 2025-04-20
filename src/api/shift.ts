@@ -53,33 +53,31 @@ export async function checkActiveShift() {
     return response.data;
   } catch (err: unknown) {
     if (axios.isAxiosError(err)) {
-      toast.error("Gagal memeriksa status shift.");
+      toast.error("Failed to check shift status.");
       console.error(
         "Check active shift failed:",
         err.response?.data || err.message
       );
     } else {
-      toast.error("Terjadi kesalahan tak terduga.");
+      toast.error("An unexpected error occurred.");
       console.error("Check active shift failed:", err);
     }
 
     throw err;
   }
 }
+
 export async function getShift() {
   try {
     const response = await axios.get(`${base_url}/shift`, getAuthHeader());
     return response.data;
   } catch (err: unknown) {
     if (axios.isAxiosError(err)) {
-      toast.error("Gagal memeriksa status shift.");
-      console.error(
-        "Check active shift failed:",
-        err.response?.data || err.message
-      );
+      toast.error("Failed to retrieve shift data.");
+      console.error("Get shift failed:", err.response?.data || err.message);
     } else {
-      toast.error("Terjadi kesalahan tak terduga.");
-      console.error("Check active shift failed:", err);
+      toast.error("An unexpected error occurred.");
+      console.error("Get shift failed:", err);
     }
 
     throw err;
@@ -90,26 +88,26 @@ export async function endShift(endCash: number) {
   try {
     const response = await axios.post(
       `${base_url}/shift/end`,
-      { endCash }, // ✅ Kirim endCash ke backend
+      { endCash },
       getAuthHeader()
     );
 
-    toast.success("Shift berhasil diakhiri.");
+    toast.success("Shift ended successfully.");
     return response.data;
   } catch (err: unknown) {
     if (axios.isAxiosError(err)) {
       const errorMessage =
-        err.response?.data?.message || "Gagal mengakhiri shift.";
+        err.response?.data?.message || "Failed to end shift.";
 
       if (err.response?.status === 400) {
         toast.error(errorMessage);
       } else if (err.response?.status === 500) {
-        toast.error("Terjadi kesalahan server. Silakan coba lagi nanti.");
+        toast.error("Server error occurred. Please try again later.");
       } else {
-        toast.error("Terjadi kesalahan saat mengakhiri shift.");
+        toast.error("An error occurred while ending the shift.");
       }
     } else {
-      toast.error("Terjadi kesalahan tak terduga.");
+      toast.error("An unexpected error occurred.");
     }
 
     console.error("End shift failed:", err);

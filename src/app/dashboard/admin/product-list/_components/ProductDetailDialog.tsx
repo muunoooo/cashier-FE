@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Dialog,
   DialogTrigger,
@@ -16,6 +16,7 @@ import { formatDateToDate } from "@/helpers/Date";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatRupiah } from "@/helpers/Currency";
 import { GiAppleSeeds } from "react-icons/gi";
+import Image from "next/image";
 
 interface ProductDetailDialogProps {
   productId: string;
@@ -28,23 +29,24 @@ const ProductDetailDialog: React.FC<ProductDetailDialogProps> = ({
   const [product, setProduct] = useState<IProduct | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const fetchProductDetail = async () => {
+  const fetchProductDetail = useCallback(async () => {
     setIsLoading(true);
     try {
       const data = await getProductById(productId);
       setProduct(data);
     } catch (err) {
+      console.error(err);
       setProduct(null);
     } finally {
       setIsLoading(false);
     }
-  };
-
+  }, [productId]);
+  
   useEffect(() => {
     if (isDialogOpen) {
       fetchProductDetail();
     }
-  }, [isDialogOpen]);
+  }, [isDialogOpen, fetchProductDetail]);
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -83,18 +85,22 @@ const ProductDetailDialog: React.FC<ProductDetailDialogProps> = ({
                 <strong>Category:</strong> {product.category}
               </div>
               <div>
-                <strong>Created At:</strong>{" "}
+                <strong>Created At:</strong>
                 {formatDateToDate(product.createdAt)}
               </div>
             </div>
 
             {product.imageUrl && (
               <div className="w-full md:w-48 flex justify-center items-start">
-                <img
-                  src={product.imageUrl}
-                  alt={product.name}
-                  className="rounded-md max-h-48 object-contain border"
-                />
+                <div className="relative w-full h-48 max-w-[192px]">
+                  <Image
+                    src={product.imageUrl}
+                    alt={product.name}
+                    fill
+                    className="rounded-md object-contain border"
+                    sizes="(max-width: 768px) 100vw, 192px"
+                  />
+                </div>
               </div>
             )}
           </div>

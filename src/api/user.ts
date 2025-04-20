@@ -64,7 +64,6 @@ export async function updateUser(
       },
     });
 
-    toast.success("User updated successfully!");
     return res.data.updatedUser;
   } catch (err) {
     console.error("Failed to update user:", err);

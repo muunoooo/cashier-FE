@@ -2,12 +2,12 @@
 
 import { useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import ClientLayout from "@/components/ClientLayout";
-import { PacmanLoader } from "react-spinners";
 import Image from "next/image";
 import { AdminDashboard } from "./_components/AdminDashboard";
 import { CashierDashboard } from "./_components/CashierDashboard";
 import { useSession } from "@/contexts/SessionContext";
+import ClientLayout from "@/components/ClientLayout";
+import Loading from "@/components/loading";
 
 export default function DashboardPage() {
   const { user, isAuth, isLoading } = useSession();
@@ -18,7 +18,6 @@ export default function DashboardPage() {
   useEffect(() => {
     if (!isLoading) {
       if (!isAuth) {
-
         router.push("/sign-in");
       }
     }
@@ -42,7 +41,7 @@ export default function DashboardPage() {
       {isLoading ? (
         <div className="p-6 text-center">
           <h2 className="text-2xl font-bold text-primary">Dashboard</h2>
-          <PacmanLoader color="#36d7b7" size={25} />
+          <Loading />
         </div>
       ) : (
         <div className=" max-w-5xl mx-auto">

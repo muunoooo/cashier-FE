@@ -6,12 +6,12 @@ import CartSidebar from "./_components/CartSidebar";
 import ClientLayout from "@/components/ClientLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { checkActiveShift, startShift, endShift } from "@/api/shift";
-import { PacmanLoader } from "react-spinners";
+import { checkActiveShift, startShift } from "@/api/shift";
 import { CartProvider } from "@/contexts/CartContext";
 import { useSession } from "@/contexts/SessionContext";
 import EndShiftDialog from "./_components/EndShiftDialog";
 import { formatToRupiah, parseRupiahString } from "@/helpers/Currency";
+import Loading from "@/components/loading";
 
 export default function CashierPage() {
   const { isLoading: sessionLoading } = useSession();
@@ -24,7 +24,9 @@ export default function CashierPage() {
       try {
         const res = await checkActiveShift();
         setHasActiveShift(res.hasActiveShift);
-      } catch (error) {
+      } catch (err) {
+        console.error(err);
+        
         setHasActiveShift(false);
       } finally {
         setLoading(false);
@@ -48,7 +50,7 @@ export default function CashierPage() {
   if (loading || sessionLoading) {
     return (
       <ClientLayout>
-        <PacmanLoader />
+        <Loading />
       </ClientLayout>
     );
   }
@@ -76,7 +78,7 @@ export default function CashierPage() {
               Ready to start working? 🐻
             </h3>
             <p className="text-sm text-gray-600 mb-4">
-              Let's get to work and make today productive!
+              Let&apos;s get to work and make today productive!
             </p>
             <div className="mb-4">
               <label className="block text-sm font-medium">Starting Cash</label>

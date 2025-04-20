@@ -33,7 +33,9 @@ const DeleteUserDialog: React.FC<DeleteUserDialogProps> = ({
       await softDeleteUser(userId);
       onUserDeleted();
       setIsDialogOpen(false);
-    } catch (error) {
+    } catch (err) {
+      console.error(err);
+      
     } finally {
       setIsSubmitting(false);
     }

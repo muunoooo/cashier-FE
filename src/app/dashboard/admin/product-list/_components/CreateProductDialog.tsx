@@ -23,6 +23,13 @@ import { createProduct } from "@/api/product";
 import * as Yup from "yup";
 import { formatToRupiah, parseRupiahString } from "@/helpers/Currency";
 
+type FormValues = {
+  name: string;
+  price: number;
+  stock: number;
+  category: string;
+};
+
 interface CreateProductDialogProps {
   onProductCreated: () => void;
 }
@@ -44,7 +51,7 @@ const CreateProductDialog: React.FC<CreateProductDialogProps> = ({
 
   const handleSubmit = async (
     values: { name: string; price: number; stock: number; category: string },
-    { setSubmitting, resetForm }: FormikHelpers<any>
+    { setSubmitting, resetForm }: FormikHelpers<FormValues>
   ) => {
     try {
       const formData = new FormData();
@@ -62,6 +69,8 @@ const CreateProductDialog: React.FC<CreateProductDialogProps> = ({
       setSelectedFile(null);
       setIsDialogOpen(false);
     } catch (err) {
+      console.error(err);
+      
       toast.error("Gagal membuat produk");
     } finally {
       setSubmitting(false);

@@ -67,12 +67,12 @@ const UpdateUserDialog: React.FC<UpdateUserDialogProps> = ({
     try {
       setIsSubmitting(true);
       await updateUser(user.id, updatedUser, token);
-      toast("User updated successfully!");
+      toast.success("User updated successfully!");
       onUserUpdated();
       setIsDialogOpen(false);
     } catch (error) {
       console.error("UPDATE ERROR:", error);
-      toast("Failed to update user.");
+      toast.error("Failed to update user.");
     } finally {
       setIsSubmitting(false);
     }

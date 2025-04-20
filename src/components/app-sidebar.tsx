@@ -3,13 +3,13 @@
 import * as React from "react";
 import {
   Users,
-  PersonStanding,
-  Briefcase,
   Home,
-  Shield,
   UserPen,
   Apple,
 } from "lucide-react";
+import { TbTransactionDollar } from "react-icons/tb";
+import { FaHistory } from "react-icons/fa";
+import { HiDocumentReport } from "react-icons/hi";
 import { NavUser } from "@/components/nav-user";
 import {
   Sidebar,
@@ -53,19 +53,19 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     {
       title: "Report",
       url: "/dashboard/admin/report",
-      icon: Apple,
+      icon: HiDocumentReport,
     },
   ];
   const CashierMenu = [
     {
       title: "Transaction",
       url: "/dashboard/cashier/transaction",
-      icon: Briefcase,
+      icon: TbTransactionDollar,
     },
     {
       title: "Transaction History",
       url: "/dashboard/cashier/transaction-history",
-      icon: Briefcase,
+      icon: FaHistory ,
     },
   ];
 
