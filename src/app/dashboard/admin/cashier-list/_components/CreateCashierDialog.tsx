@@ -35,7 +35,7 @@ const CreateUserDialog: React.FC<CreateUserDialogProps> = ({
     }: FormikHelpers<{ name: string; email: string; password: string }>
   ) => {
     if (!user) {
-      toast("No user session found. Please log in first.");
+      toast.warning("No user session found. Please log in first.");
       return;
     }
 
@@ -43,12 +43,12 @@ const CreateUserDialog: React.FC<CreateUserDialogProps> = ({
       const result = await registerUser(values);
 
       if (result) {
-        toast(`Cashier "${values.name}" was successfully created`);
+        toast.success(`Cashier "${values.name}" was successfully created`);
         onUserCreated();
         resetForm();
         setIsDialogOpen(false);
       } else {
-        toast("Failed to create user");
+        toast.error("Failed to create user");
       }
     } catch (err) {
       console.error(err)

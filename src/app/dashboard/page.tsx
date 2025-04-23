@@ -53,7 +53,7 @@ export default function DashboardPage() {
               src="/dashboard.png"
               alt="Dashboard Illustration"
               width={100}
-              height={100}
+              height={100} 
               className="object-contain"
             />
           </div>

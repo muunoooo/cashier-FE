@@ -10,16 +10,32 @@ import { formatToRupiah } from "@/helpers/Currency";
 
 export default function CartSidebar() {
   const { user } = useSession();
-  const { cart, increaseQty, decreaseQty, removeFromCart, clearCart } =
-    useCart();
+  const {
+    cart,
+    increaseQty,
+    decreaseQty,
+    removeFromCart,
+    clearCart,
+    triggerProductRefresh,
+  } = useCart();
+  const resetPaymentForm = () => {
+    setCashPaid(0);
+    setFormattedCashPaid("");
+    setDebitCardNo("");
+    setPaymentMethod("CASH");
+  };
+
   const [paymentMethod, setPaymentMethod] = useState<"CASH" | "DEBIT">("CASH");
   const [cashPaid, setCashPaid] = useState<number>(0);
   const [debitCardNo, setDebitCardNo] = useState<string>("");
+
   const [shiftId, setShiftId] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [formattedCashPaid, setFormattedCashPaid] = useState<string>("");
 
   const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+
+  const [change, setChange] = useState<number>(0);
 
   useEffect(() => {
     const fetchActiveShift = async () => {
@@ -49,6 +65,15 @@ export default function CartSidebar() {
     fetchActiveShift();
   }, []);
 
+  useEffect(() => {
+    if (cashPaid >= total) {
+      const calculatedChange = cashPaid - total;
+      setChange(calculatedChange);
+    } else {
+      setChange(0);
+    }
+  }, [cashPaid, total]);
+
   const handlePayment = async () => {
     if (paymentMethod === "CASH" && cashPaid < total) {
       toast.error("Insufficient cash paid!");
@@ -77,6 +102,8 @@ export default function CartSidebar() {
     const change =
       paymentMethod === "CASH" && cashPaid > total ? cashPaid - total : 0;
 
+    setChange(change);
+
     const cashier = {
       id: user ? user.id : "default-cashier-id",
       name: user ? user.name : "Default Cashier",
@@ -86,7 +113,7 @@ export default function CartSidebar() {
       id: uuidv4(),
       paymentMethod,
       totalPrice: total,
-      change,
+      change: change,
       cashier,
       shift: {
         id: shiftId,
@@ -103,13 +130,10 @@ export default function CartSidebar() {
 
     try {
       await createTransaction(shiftId, transactionData);
-
       toast.success("Transaction created successfully!");
-
-      setCashPaid(0);
-      setDebitCardNo("");
-      setPaymentMethod("CASH");
+      resetPaymentForm();
       clearCart();
+      triggerProductRefresh();
     } catch (err) {
       console.error("Error creating transaction:", err);
       toast.error("Failed to create transaction.");
@@ -118,13 +142,9 @@ export default function CartSidebar() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const rawValue = e.target.value;
-
     const cleaned = rawValue.replace(/[^\d]/g, "");
-
     const numericValue = parseInt(cleaned, 10) || 0;
-
     setCashPaid(numericValue);
-
     setFormattedCashPaid(formatToRupiah(numericValue));
   };
 
@@ -148,7 +168,7 @@ export default function CartSidebar() {
                 >
                   ➖
                 </button>
-                ✖️{item.quantity}
+                {item.quantity}
                 <button
                   onClick={() => increaseQty(item.id)}
                   className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
@@ -199,7 +219,6 @@ export default function CartSidebar() {
                 type="text"
                 value={formattedCashPaid}
                 onChange={handleChange}
-                // onBlur={handleBlur}
                 className="ml-2 p-2 border rounded w-full sm:w-auto"
                 placeholder="Enter amount"
               />
@@ -219,6 +238,12 @@ export default function CartSidebar() {
                 placeholder="Enter card number"
               />
             </label>
+          </div>
+        )}
+
+        {paymentMethod === "CASH" && change > 0 && (
+          <div className="mt-2 text-sm text-green-500">
+            <span>Change: Rp {change.toLocaleString()}</span>
           </div>
         )}
 
