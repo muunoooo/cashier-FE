@@ -21,7 +21,7 @@ import { formatRupiah } from "@/helpers/Currency";
 import Loading from "@/components/loading";
 import { useRouter, useSearchParams } from "next/navigation";
 
-const limit = 5;
+const limit = 10;
 
 const TransacionHistoryList = () => {
   const router = useRouter();

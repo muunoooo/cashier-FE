@@ -11,6 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { formatIndonesianDateTime } from "@/helpers/Date";
+import { formatRupiah } from "@/helpers/Currency";
 
 interface ShiftYearlyReportProps {
   selectedYear: number;
@@ -51,7 +52,6 @@ const ShiftYearlyReport: React.FC<ShiftYearlyReportProps> = ({
       <div className="w-full max-w-6xl mt-4">
         {shifts.length > 0 ? (
           <>
-            {/* Card view for mobile */}
             <div className="block md:hidden space-y-4">
               {shifts.map((shift) => (
                 <div
@@ -59,50 +59,61 @@ const ShiftYearlyReport: React.FC<ShiftYearlyReportProps> = ({
                   className="border border-gray-200 rounded-lg p-4 shadow-sm"
                 >
                   <p>
-                    <span className="font-semibold">Cashier:</span>{" "}
+                    <span className="font-semibold">Cashier:</span>
                     {shift.cashier.name}
                   </p>
                   <p>
-                    <span className="font-semibold">Start Time:</span>{" "}
+                    <span className="font-semibold">Start Time:</span>
                     {formatIndonesianDateTime(shift.startedAt)}
                   </p>
                   <p>
-                    <span className="font-semibold">End Time:</span>{" "}
+                    <span className="font-semibold">End Time:</span>
                     {shift.endedAt
                       ? formatIndonesianDateTime(shift.endedAt)
                       : "Active"}
                   </p>
+
                   <p>
-                    <span className="font-semibold">Start Cash:</span> Rp{" "}
-                    {shift.startCash.toLocaleString("id-ID")}
+                    <span className="font-semibold">Total Transaction:</span>
+                    {formatRupiah(shift.totalTransaction)}
                   </p>
                   <p>
-                    <span className="font-semibold">End Cash:</span>{" "}
-                    {shift.endCash
-                      ? `Rp ${shift.endCash.toLocaleString("id-ID")}`
-                      : "N/A"}
+                    <span className="font-semibold">Total Debit:</span>
+                    {formatRupiah(shift.totalDebit)}
                   </p>
                   <p>
-                    <span className="font-semibold">Total Transaction:</span> Rp{" "}
-                    {shift.totalTransaction.toLocaleString("id-ID")}
+                    <span className="font-semibold">Total Cash:</span>
+                    {formatRupiah(shift.totalCash)}
                   </p>
                   <p>
-                    <span className="font-semibold">Total Debit:</span> Rp{" "}
-                    {shift.totalDebit.toLocaleString("id-ID")}
+                    <span className="font-semibold">Start Cash:</span>
+                    {formatRupiah(shift.startCash)}
                   </p>
                   <p>
-                    <span className="font-semibold">Total Cash:</span> Rp{" "}
-                    {shift.totalCash.toLocaleString("id-ID")}
+                    <span className="font-semibold">End Cash:</span>
+                    {shift.endCash ? (
+                      <span
+                        className={`font-semibold ${
+                          shift.endCash === shift.startCash + shift.totalCash
+                            ? "text-green-600"
+                            : "text-red-600"
+                        }`}
+                      >
+                        {formatRupiah(shift.endCash)}
+                      </span>
+                    ) : (
+                      "N/A"
+                    )}
                   </p>
                   <p className="font-semibold">
-                    Status:{" "}
+                    Status:
                     <span
                       className={`inline-block px-2 py-1 rounded-md text-sm font-medium
-                        ${
-                          shift.isActive
-                            ? "bg-green-100 text-green-600"
-                            : "bg-gray-100 text-gray-600"
-                        }`}
+                      ${
+                        shift.isActive
+                          ? "bg-green-100 text-green-600"
+                          : "bg-gray-100 text-gray-600"
+                      }`}
                     >
                       {shift.isActive ? "Active" : "Ended"}
                     </span>
@@ -111,7 +122,6 @@ const ShiftYearlyReport: React.FC<ShiftYearlyReportProps> = ({
               ))}
             </div>
 
-            {/* Table view for desktop */}
             <div className="hidden md:block">
               <Table>
                 <TableHeader>
@@ -119,57 +129,65 @@ const ShiftYearlyReport: React.FC<ShiftYearlyReportProps> = ({
                     <TableHead>Cashier</TableHead>
                     <TableHead>Start Time</TableHead>
                     <TableHead>End Time</TableHead>
-                    <TableHead>Start Cash</TableHead>
-                    <TableHead>End Cash</TableHead>
                     <TableHead>Total Transaction</TableHead>
                     <TableHead>Total Debit</TableHead>
                     <TableHead>Total Cash</TableHead>
+                    <TableHead>Start Cash</TableHead>
+                    <TableHead>End Cash</TableHead>
                     <TableHead>Status</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {shifts.map((shift) => (
-                    <TableRow key={shift.shiftId}>
-                      <TableCell>{shift.cashier.name}</TableCell>
-                      <TableCell>
-                        {formatIndonesianDateTime(shift.startedAt)}
-                      </TableCell>
-                      <TableCell>
-                        {shift.endedAt
-                          ? formatIndonesianDateTime(shift.endedAt)
-                          : "Active"}
-                      </TableCell>
-                      <TableCell>
-                        Rp {shift.startCash.toLocaleString("id-ID")}
-                      </TableCell>
-                      <TableCell>
-                        {shift.endCash
-                          ? `Rp ${shift.endCash.toLocaleString("id-ID")}`
-                          : "N/A"}
-                      </TableCell>
-                      <TableCell>
-                        Rp {shift.totalTransaction.toLocaleString("id-ID")}
-                      </TableCell>
-                      <TableCell>
-                        Rp {shift.totalDebit.toLocaleString("id-ID")}
-                      </TableCell>
-                      <TableCell>
-                        Rp {shift.totalCash.toLocaleString("id-ID")}
-                      </TableCell>
-                      <TableCell>
-                        <span
-                          className={`inline-block px-2 py-1 rounded-md text-sm font-medium
-                            ${
+                  {shifts.map((shift) => {
+                    const isEndCashCorrect =
+                      shift.endCash === shift.startCash + shift.totalCash;
+                    return (
+                      <TableRow key={shift.shiftId}>
+                        <TableCell>{shift.cashier.name}</TableCell>
+                        <TableCell>
+                          {formatIndonesianDateTime(shift.startedAt)}
+                        </TableCell>
+                        <TableCell>
+                          {shift.endedAt
+                            ? formatIndonesianDateTime(shift.endedAt)
+                            : "Active"}
+                        </TableCell>
+
+                        <TableCell>
+                          {formatRupiah(shift.totalTransaction)}
+                        </TableCell>
+                        <TableCell>{formatRupiah(shift.totalDebit)}</TableCell>
+                        <TableCell>{formatRupiah(shift.totalCash)}</TableCell>
+                        <TableCell>{formatRupiah(shift.startCash)}</TableCell>
+                        <TableCell>
+                          {shift.endCash ? (
+                            <span
+                              className={`font-semibold text-sm rounded-md ${
+                                isEndCashCorrect
+                                  ? " text-green-600"
+                                  : " text-red-600"
+                              }`}
+                            >
+                              {formatRupiah(shift.endCash)}
+                            </span>
+                          ) : (
+                            "N/A"
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          <span
+                            className={`inline-block px-2 py-1 rounded-md text-sm font-medium ${
                               shift.isActive
                                 ? "bg-green-100 text-green-600"
                                 : "bg-gray-100 text-gray-600"
                             }`}
-                        >
-                          {shift.isActive ? "Active" : "Ended"}
-                        </span>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                          >
+                            {shift.isActive ? "Active" : "Ended"}
+                          </span>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
                 </TableBody>
               </Table>
             </div>

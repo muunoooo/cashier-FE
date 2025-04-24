@@ -9,7 +9,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { getTransactionById } from "@/api/transaction"; // Pastikan fungsi API sudah ada
+import { getTransactionById } from "@/api/transaction";
 import { Button } from "@/components/ui/button";
 import { formatDateToDate } from "@/helpers/Date";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -58,12 +58,12 @@ const TransactionDetailDialog: React.FC<TransactionDetailDialogProps> = ({
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="w-[420px] md:max-w-xl">
+      <DialogContent className="w-full max-w-56 md:max-w-xl px-4 sm:px-6">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-semibold">
+          <DialogTitle className="text-xl sm:text-2xl font-semibold">
             Transaction Details
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="text-xs sm:text-sm">
             Complete information about the transaction
           </DialogDescription>
         </DialogHeader>
@@ -75,8 +75,8 @@ const TransactionDetailDialog: React.FC<TransactionDetailDialogProps> = ({
             <Skeleton className="w-full h-5" />
           </div>
         ) : (
-          <div className="mt-4 flex flex-col md:flex-row gap-4 text-sm">
-            <div className="flex-1 space-y-2">
+          <div className="mt-4 flex flex-col gap-4 text-sm sm:text-base max-h-[65vh] overflow-y-auto">
+            <div className="space-y-2">
               <div>
                 <strong>Transaction ID:</strong> {transaction.id}
               </div>
@@ -84,21 +84,21 @@ const TransactionDetailDialog: React.FC<TransactionDetailDialogProps> = ({
                 <strong>Payment Method:</strong> {transaction.paymentMethod}
               </div>
               <div>
-                <strong>Total Price:</strong>{" "}
+                <strong>Total Price:</strong>
                 {formatRupiah(transaction.totalPrice)}
               </div>
               <div>
-                <strong>Cash Paid:</strong>{" "}
+                <strong>Cash Paid:</strong>
                 {transaction.cashPaid
                   ? formatRupiah(transaction.cashPaid)
                   : "-"}
               </div>
               <div>
-                <strong>Change:</strong>{" "}
+                <strong>Change:</strong>
                 {transaction.change ? formatRupiah(transaction.change) : "-"}
               </div>
               <div>
-                <strong>Created At:</strong>{" "}
+                <strong>Created At:</strong>
                 {formatDateToDate(transaction.createdAt)}
               </div>
               <div>
@@ -112,7 +112,7 @@ const TransactionDetailDialog: React.FC<TransactionDetailDialogProps> = ({
                 <ul className="list-disc pl-5">
                   {transaction.items.map((item) => (
                     <li key={item.id}>
-                      {item.productName} - {item.quantity} x{" "}
+                      {item.productName} - {item.quantity} x
                       {formatRupiah(item.price)} = {formatRupiah(item.subtotal)}
                     </li>
                   ))}

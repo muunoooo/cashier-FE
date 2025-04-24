@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { Suspense, useCallback, useEffect, useState } from "react";
 import ClientLayout from "@/components/ClientLayout";
@@ -24,14 +24,12 @@ import SearchBarDebounce from "@/components/SearchDebounce";
 import Loading from "@/components/loading";
 import { useRouter, useSearchParams } from "next/navigation";
 
-
 const CashierList = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { isLoading: sessionLoading } = useSession();
 
   const limit = 5;
-
 
   const initialPage = parseInt(searchParams.get("page") || "1", 10);
   const initialSearch = searchParams.get("search") || "";
@@ -42,7 +40,6 @@ const CashierList = () => {
   const [allNames, setAllNames] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>(initialSearch);
-
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -55,7 +52,6 @@ const CashierList = () => {
 
     router.replace(newUrl);
   }, [currentPage, searchQuery, router]);
-
 
   const fetchUserData = useCallback(
     (page = 1, query = "") => {
@@ -151,7 +147,6 @@ const CashierList = () => {
                         <TableHead className="text-center">#</TableHead>
                         <TableHead>NAME</TableHead>
                         <TableHead>EMAIL</TableHead>
-                        <TableHead>ROLE</TableHead>
                         <TableHead className="hidden sm:table-cell">
                           REGISTERED DATE
                         </TableHead>
@@ -169,7 +164,6 @@ const CashierList = () => {
                           </TableCell>
                           <TableCell>{ToTitleCase(user.name)}</TableCell>
                           <TableCell>{user.email}</TableCell>
-                          <TableCell>{user.role}</TableCell>
                           <TableCell className="hidden sm:table-cell">
                             {formatDateToDate(user.createdAt)}
                           </TableCell>
