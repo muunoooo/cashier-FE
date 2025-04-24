@@ -128,6 +128,8 @@ export default function CartSidebar() {
       updatedAt: new Date().toISOString(),
     };
 
+    setLoading(true);
+
     try {
       await createTransaction(shiftId, transactionData);
       toast.success("Transaction created successfully!");
@@ -137,6 +139,8 @@ export default function CartSidebar() {
     } catch (err) {
       console.error("Error creating transaction:", err);
       toast.error("Failed to create transaction.");
+    } finally {
+      setLoading(false);
     }
   };
 
