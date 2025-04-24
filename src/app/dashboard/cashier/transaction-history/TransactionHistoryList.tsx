@@ -105,6 +105,10 @@ const TransacionHistoryList = () => {
 
           {isLoading ? (
             <Loading />
+          ) : transactions?.data?.length === 0 ? (
+            <div className="text-center py-10 text-gray-500">
+              No transactions found.
+            </div>
           ) : (
             <>
               <div className="hidden md:block w-full overflow-x-auto">

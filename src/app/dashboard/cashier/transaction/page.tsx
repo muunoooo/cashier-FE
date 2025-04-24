@@ -18,6 +18,7 @@ export default function CashierPage() {
   const [hasActiveShift, setHasActiveShift] = useState<boolean | null>(null);
   const [startCash, setStartCash] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
+  const [startingShift, setStartingShift] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchShift = async () => {
@@ -26,7 +27,6 @@ export default function CashierPage() {
         setHasActiveShift(res.hasActiveShift);
       } catch (err) {
         console.error(err);
-        
         setHasActiveShift(false);
       } finally {
         setLoading(false);
@@ -39,11 +39,14 @@ export default function CashierPage() {
   }, [sessionLoading]);
 
   const handleStartShift = async () => {
+    setStartingShift(true);
     try {
       await startShift(startCash);
       setHasActiveShift(true);
     } catch (err) {
       console.error("Start shift error:", err);
+    } finally {
+      setStartingShift(false);
     }
   };
 
@@ -94,9 +97,16 @@ export default function CashierPage() {
                 className="mt-2"
               />
             </div>
-            <Button onClick={handleStartShift} className="w-full">
-              Start Shift
-            </Button>
+
+            {startingShift ? (
+              <p className="text-sm text-yellow-600 font-semibold mb-4">
+                Starting shift, please wait...
+              </p>
+            ) : (
+              <Button onClick={handleStartShift} className="w-full">
+                Start Shift
+              </Button>
+            )}
           </div>
         </div>
       )}
