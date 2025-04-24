@@ -20,8 +20,8 @@ import { Input } from "@/components/ui/input";
 import { Plus } from "lucide-react";
 import { toast } from "react-toastify";
 import { createProduct } from "@/api/product";
-import * as Yup from "yup";
 import { formatToRupiah, parseRupiahString } from "@/helpers/Currency";
+import { CreateProductSchema } from "@/lib/schema";
 
 type FormValues = {
   name: string;
@@ -34,14 +34,7 @@ interface CreateProductDialogProps {
   onProductCreated: () => void;
 }
 
-const ProductSchema = Yup.object().shape({
-  name: Yup.string().required("Product name is required"),
-  price: Yup.number().required("Price is required"),
-  stock: Yup.number().required("Stock is required"),
-  category: Yup.string()
-    .oneOf(["FOOD", "DRINK"])
-    .required("Category is required"),
-});
+
 
 const CreateProductDialog: React.FC<CreateProductDialogProps> = ({
   onProductCreated,
@@ -70,7 +63,7 @@ const CreateProductDialog: React.FC<CreateProductDialogProps> = ({
       setIsDialogOpen(false);
     } catch (err) {
       console.error(err);
-      
+
       toast.error("Gagal membuat produk");
     } finally {
       setSubmitting(false);
@@ -102,7 +95,7 @@ const CreateProductDialog: React.FC<CreateProductDialogProps> = ({
             stock: 0,
             category: "",
           }}
-          validationSchema={ProductSchema}
+          validationSchema={CreateProductSchema}
           onSubmit={handleSubmit}
           validateOnBlur={true}
         >
@@ -110,9 +103,9 @@ const CreateProductDialog: React.FC<CreateProductDialogProps> = ({
             <Form className="space-y-4 mt-4">
               <div>
                 <label className="block text-sm font-medium">
-                  Product Name
+                  Product Name<span className="text-red-500">*</span>
                 </label>
-                <Field as={Input} name="name" placeholder="Nama Produk" />
+                <Field as={Input} name="name" placeholder="Product Name" />
                 <ErrorMessage
                   name="name"
                   component="div"
@@ -121,7 +114,9 @@ const CreateProductDialog: React.FC<CreateProductDialogProps> = ({
               </div>
 
               <div>
-                <label className="block text-sm font-medium">Price</label>
+                <label className="block text-sm font-medium">
+                  Price<span className="text-red-500">*</span>
+                </label>
                 <Field name="price">
                   {({ field, form }: FieldProps<number>) => (
                     <Input
@@ -144,7 +139,9 @@ const CreateProductDialog: React.FC<CreateProductDialogProps> = ({
               </div>
 
               <div>
-                <label className="block text-sm font-medium">Stock</label>
+                <label className="block text-sm font-medium">
+                  Stock<span className="text-red-500">*</span>
+                </label>
                 <Field
                   as={Input}
                   type="number"
@@ -159,7 +156,9 @@ const CreateProductDialog: React.FC<CreateProductDialogProps> = ({
               </div>
 
               <div>
-                <label className="block text-sm font-medium">Category</label>
+                <label className="block text-sm font-medium">
+                  Category<span className="text-red-500">*</span>
+                </label>
                 <Field
                   as="select"
                   name="category"
@@ -178,7 +177,7 @@ const CreateProductDialog: React.FC<CreateProductDialogProps> = ({
 
               <div>
                 <label className="block text-sm font-medium">
-                  Product Photo
+                  Product Photo<span className="text-red-500">*</span>
                 </label>
                 <Input
                   type="file"
@@ -188,6 +187,7 @@ const CreateProductDialog: React.FC<CreateProductDialogProps> = ({
                       setSelectedFile(e.currentTarget.files[0]);
                     }
                   }}
+                  required
                 />
               </div>
 

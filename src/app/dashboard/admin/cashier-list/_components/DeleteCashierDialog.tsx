@@ -13,13 +13,13 @@ import { Button } from "@/components/ui/button";
 import { FiTrash } from "react-icons/fi";
 import { softDeleteUser } from "@/api/user";
 
-interface DeleteUserDialogProps {
+interface DeleteCashierDialogProps {
   userId: string;
-  name:string
+  name: string;
   onUserDeleted: () => void;
 }
 
-const DeleteUserDialog: React.FC<DeleteUserDialogProps> = ({
+const DeleteCashierDialog: React.FC<DeleteCashierDialogProps> = ({
   userId,
   name,
   onUserDeleted,
@@ -35,7 +35,6 @@ const DeleteUserDialog: React.FC<DeleteUserDialogProps> = ({
       setIsDialogOpen(false);
     } catch (err) {
       console.error(err);
-      
     } finally {
       setIsSubmitting(false);
     }
@@ -52,8 +51,9 @@ const DeleteUserDialog: React.FC<DeleteUserDialogProps> = ({
             Delete User
           </DialogTitle>
           <DialogDescription className="text-sm text-gray-600">
-            Are you sure you want to delete <span className="text-orange-500">{name}</span> account? This action cannot be
-            undone.
+            Are you sure you want to delete{" "}
+            <span className="text-orange-500">{name}</span> account? This action
+            cannot be undone.
           </DialogDescription>
         </DialogHeader>
 
@@ -63,7 +63,6 @@ const DeleteUserDialog: React.FC<DeleteUserDialogProps> = ({
             you want to proceed.
           </p>
 
-          {/* Delete & Cancel Buttons */}
           <div className="flex justify-end mt-6 space-x-4">
             <Button
               type="button"
@@ -88,4 +87,4 @@ const DeleteUserDialog: React.FC<DeleteUserDialogProps> = ({
   );
 };
 
-export default DeleteUserDialog;
+export default DeleteCashierDialog;

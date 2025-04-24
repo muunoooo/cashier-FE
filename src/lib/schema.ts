@@ -44,3 +44,12 @@ export const UpdateEmailSchema = Yup.object().shape({
     .email("Invalid email format")
     .required("Email is required"),
 });
+
+export const CreateProductSchema = Yup.object().shape({
+  name: Yup.string().required("Product name is required"),
+  price: Yup.number().required("Price is required"),
+  stock: Yup.number().required("Stock is required"),
+  category: Yup.string()
+    .oneOf(["FOOD", "DRINK"])
+    .required("Category is required"),
+});

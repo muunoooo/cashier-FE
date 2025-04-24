@@ -20,10 +20,8 @@ export default function CashierLayout({
           {children}
         </div>
 
-        {/* Kanan: Daftar Produk + Pembayaran */}
         <div className="w-full md:w-1/3 lg:w-2/5 overflow-y-auto p-4 bg-gray-50">
           <div className="text-xl font-semibold mb-2">Cart & Payment</div>
-          {/* Kamu bisa isi komponen <Cart /> di sini */}
         </div>
       </div>
     </div>

@@ -29,7 +29,7 @@ export async function getAllUsers(
     };
   } catch (err) {
     console.error("Failed to fetch all users:", err);
-    toast.error("Gagal mengambil data user.");
+    toast.error("Failed to fetch all users");
     throw err;
   }
 }
@@ -40,7 +40,7 @@ export async function getUserById(id: string): Promise<IUser> {
     return res.data.user;
   } catch (err) {
     console.error(`Failed to fetch user with ID ${id}:`, err);
-    toast.error("Gagal mengambil data user.");
+    toast.error(`Failed to fetch user with ID ${id}`);
     throw err;
   }
 }
@@ -67,7 +67,7 @@ export async function updateUser(
     return res.data.updatedUser;
   } catch (err) {
     console.error("Failed to update user:", err);
-    toast.error("Gagal mengupdate user.");
+    toast.error("Failed to update user:.");
     throw err;
   }
 }
@@ -75,10 +75,10 @@ export async function updateUser(
 export async function softDeleteUser(id: string): Promise<void> {
   try {
     await axios.delete(`${base_url}/user/${id}`, getAuthHeader());
-    toast.success("User berhasil dihapus.");
+    toast.success("User Deleted");
   } catch (err) {
     console.error("Failed to delete user:", err);
-    toast.error("Gagal menghapus user.");
+    toast.error("Failed to delete user.");
     throw err;
   }
 }

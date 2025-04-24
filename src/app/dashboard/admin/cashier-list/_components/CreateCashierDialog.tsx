@@ -16,11 +16,11 @@ import { registerUser } from "@/api/auth";
 import { RegisterSchema } from "@/lib/schema";
 import { useSession } from "@/contexts/SessionContext";
 
-interface CreateUserDialogProps {
+interface CreateCashierDialogProps {
   onUserCreated: () => void;
 }
 
-const CreateUserDialog: React.FC<CreateUserDialogProps> = ({
+const CreateCashierDialog: React.FC<CreateCashierDialogProps> = ({
   onUserCreated,
 }) => {
   const { user } = useSession();
@@ -51,7 +51,7 @@ const CreateUserDialog: React.FC<CreateUserDialogProps> = ({
         toast.error("Failed to create user");
       }
     } catch (err) {
-      console.error(err)
+      console.error(err);
     } finally {
       setSubmitting(false);
     }
@@ -105,7 +105,6 @@ const CreateUserDialog: React.FC<CreateUserDialogProps> = ({
                 />
               </div>
 
-              {/* Email */}
               <div>
                 <label className="block text-sm font-medium">
                   Email <span className="text-red-500">*</span>
@@ -124,7 +123,6 @@ const CreateUserDialog: React.FC<CreateUserDialogProps> = ({
                 />
               </div>
 
-              {/* Kata Sandi */}
               <div>
                 <label className="block text-sm font-medium">
                   Password <span className="text-red-500">*</span>
@@ -154,7 +152,6 @@ const CreateUserDialog: React.FC<CreateUserDialogProps> = ({
                 />
               </div>
 
-              {/* Tombol Submit & Batal */}
               <div className="flex justify-end mt-6 space-x-4">
                 <Button
                   type="button"
@@ -180,4 +177,4 @@ const CreateUserDialog: React.FC<CreateUserDialogProps> = ({
   );
 };
 
-export default CreateUserDialog;
+export default CreateCashierDialog;

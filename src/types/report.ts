@@ -1,4 +1,3 @@
-// export Interface untuk ringkasan transaksi harian
 export interface IReportSummary {
   totalTransaction: number;
   totalIncome: number;
@@ -6,13 +5,11 @@ export interface IReportSummary {
   totalDebit: number;
 }
 
-// export Interface untuk ringkasan per item (produk)
 export interface IPerItemSummary {
   name: string;
   totalQty: number;
 }
 
-// export Interface untuk data pagination
 export interface IPagination {
   page: number;
   limit: number;
@@ -20,7 +17,6 @@ export interface IPagination {
   totalTransactions: number;
 }
 
-// export Interface untuk detail produk dalam transaksi
 export interface IProduct {
   id: string;
   name: string;
@@ -33,7 +29,6 @@ export interface IProduct {
   category: string;
 }
 
-// Interface untuk item dalam transaksi
 export interface ITransactionItem {
   id: string;
   transactionId: string;
@@ -44,13 +39,11 @@ export interface ITransactionItem {
   product: IProduct;
 }
 
-// Interface untuk informasi kasir
 export interface ICashier {
   name: string;
   email: string;
 }
 
-// Interface untuk transaksi
 export interface ITransaction {
   id: string;
   shiftId: string;
@@ -66,7 +59,6 @@ export interface ITransaction {
   cashier: ICashier;
 }
 
-// Interface untuk shift kasir
 export interface IShift {
   cashier: ICashier;
   startedAt: string;
@@ -77,7 +69,7 @@ export interface IShift {
   totalCash: number | null;
   totalDebit: number | null;
 }
-// Interface untuk data laporan harian secara keseluruhan
+
 export interface IDailyReport {
   date: string;
   summary: IReportSummary;

@@ -51,7 +51,7 @@ export async function getProductById(id: string): Promise<IProduct> {
     return res.data.data;
   } catch (err) {
     console.error("Failed to fetch product:", err);
-    toast.error("Gagal mengambil detail produk.");
+    toast.error("Failed to fetch product:");
     throw err;
   }
 }
@@ -62,7 +62,7 @@ export async function createProduct(data: FormData): Promise<IProduct> {
     return res.data.data;
   } catch (err) {
     console.error("Failed to create product:", err);
-    toast.error("Gagal menambahkan produk.");
+    toast.error("Failed to create product");
     throw err;
   }
 }
@@ -82,7 +82,7 @@ export async function updateProduct(
     return res.data.updatedProduct || res.data.data;
   } catch (err) {
     console.error("Failed to update product:", err);
-    toast.error("Gagal memperbarui produk.");
+    toast.error("Failed to update product.");
     throw err;
   }
 }
@@ -90,10 +90,10 @@ export async function updateProduct(
 export async function deleteProduct(id: string): Promise<void> {
   try {
     await axios.delete(`${base_url}/product/${id}`, getAuthHeader());
-    toast.success("Produk berhasil dihapus.");
+    toast.success("Product Deleted");
   } catch (err) {
     console.error("Failed to delete product:", err);
-    toast.error("Gagal menghapus produk.");
+    toast.error("Failed to delete product.");
     throw err;
   }
 }

@@ -18,12 +18,12 @@ import { FiEdit } from "react-icons/fi";
 import { useSession } from "@/contexts/SessionContext";
 import Image from "next/image";
 
-interface UpdateUserDialogProps {
+interface UpdateCashierDialogProps {
   user: IUser;
   onUserUpdated: () => void;
 }
 
-const UpdateUserDialog: React.FC<UpdateUserDialogProps> = ({
+const UpdateCashierDialog: React.FC<UpdateCashierDialogProps> = ({
   user,
   onUserUpdated,
 }) => {
@@ -72,7 +72,7 @@ const UpdateUserDialog: React.FC<UpdateUserDialogProps> = ({
       setIsDialogOpen(false);
     } catch (err) {
       console.error(err);
-      
+
       toast.error("Failed to update user.");
     } finally {
       setIsSubmitting(false);
@@ -96,7 +96,6 @@ const UpdateUserDialog: React.FC<UpdateUserDialogProps> = ({
         </DialogHeader>
 
         <div className="space-y-4 mt-4">
-          {/* Avatar */}
           <div>
             <label className="block text-sm font-medium">Profile Picture</label>
 
@@ -178,4 +177,4 @@ const UpdateUserDialog: React.FC<UpdateUserDialogProps> = ({
   );
 };
 
-export default UpdateUserDialog;
+export default UpdateCashierDialog;

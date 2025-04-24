@@ -24,7 +24,7 @@ export const getWithDateQuery = async (
     );
     return res.data;
   } catch (err) {
-    toast.error("Gagal mengambil data laporan.");
+    toast.error("Failed to fetch report");
     console.error(err);
     throw err;
   }

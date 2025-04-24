@@ -26,7 +26,7 @@ export async function getAllTransactions(
     return res.data as ITransactionPagination;
   } catch (err) {
     console.error("Failed to fetch all transactions:", err);
-    toast.error("Gagal mengambil data transaksi.");
+    toast.error("Failed to fetch all transactions.");
     throw err;
   }
 }
@@ -40,7 +40,7 @@ export async function getTransactionById(id: string): Promise<ITransaction> {
     return res.data.data as ITransaction;
   } catch (err) {
     console.error(`Failed to fetch transaction with ID ${id}:`, err);
-    toast.error("Gagal mengambil data transaksi.");
+    toast.error(`Failed to fetch transaction with ID ${id}.`);
     throw err;
   }
 }

@@ -1,12 +1,10 @@
-"use client"
+"use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { IUser } from "@/types/user";
 
 const base_url = process.env.NEXT_PUBLIC_BASE_URL_BE;
-
-
 
 interface SessionContextProps {
   user: IUser | null;
@@ -19,9 +17,15 @@ interface SessionContextProps {
   setToken: (token: string | null) => void;
 }
 
-const SessionContext = createContext<SessionContextProps | undefined>(undefined);
+const SessionContext = createContext<SessionContextProps | undefined>(
+  undefined
+);
 
-export const SessionProvider = ({ children }: { children: React.ReactNode }) => {
+export const SessionProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const [user, setUser] = useState<IUser | null>(null);
   const [isAuth, setIsAuth] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -34,7 +38,7 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
       return;
     }
 
-    setToken(storedToken); // Simpan token di context
+    setToken(storedToken);
 
     axios
       .get(`${base_url}/user/profile`, {

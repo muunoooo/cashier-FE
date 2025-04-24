@@ -24,12 +24,12 @@ import SearchBarDebounce from "@/components/SearchDebounce";
 import Loading from "@/components/loading";
 import { useRouter, useSearchParams } from "next/navigation";
 
+const limit = 5;
+
 const CashierList = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { isLoading: sessionLoading } = useSession();
-
-  const limit = 5;
 
   const initialPage = parseInt(searchParams.get("page") || "1", 10);
   const initialSearch = searchParams.get("search") || "";
@@ -77,7 +77,7 @@ const CashierList = () => {
           setIsLoading(false);
         });
     },
-    [limit]
+    [] 
   );
 
   useEffect(() => {
