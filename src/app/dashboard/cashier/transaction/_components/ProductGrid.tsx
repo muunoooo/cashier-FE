@@ -180,7 +180,7 @@ export default function ProductGrid() {
                   />
                   {isOutOfStock && (
                     <div className="absolute top-2 right-2 bg-red-600 text-white text-xs px-2 py-1 rounded">
-                      Stok Habis
+                      Out Of Stock
                     </div>
                   )}
                 </div>

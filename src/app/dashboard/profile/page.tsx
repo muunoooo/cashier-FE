@@ -26,7 +26,7 @@ const ProfilePage = () => {
         setUserData(userData);
       } catch (error) {
         console.error("Error fetching profile", error);
-        toast.error("Gagal mengambil data profil");
+        toast.error("Error fetching profile");
       } finally {
         setIsLoading(false);
       }
@@ -41,7 +41,7 @@ const ProfilePage = () => {
       const updatedUser = await getUserProfile();
       setUserData(updatedUser);
     } catch (error) {
-      toast.error("Gagal memperbarui data profil");
+      toast.error("Failed Update Profile");
       console.error(error)
     }
   };

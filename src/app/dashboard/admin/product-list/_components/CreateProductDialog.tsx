@@ -64,7 +64,7 @@ const CreateProductDialog: React.FC<CreateProductDialogProps> = ({
     } catch (err) {
       console.error(err);
 
-      toast.error("Gagal membuat produk");
+      toast.error("Failed Created Product");
     } finally {
       setSubmitting(false);
     }
